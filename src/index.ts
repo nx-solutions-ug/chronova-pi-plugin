@@ -78,6 +78,7 @@ export default function chronovaPiPlugin(pi: ExtensionAPI): void {
   });
 
   // --- session_shutdown: force-flush pending heartbeats ---
+
   pi.on("session_shutdown", async () => {
     if (!projectFolder) return;
 
