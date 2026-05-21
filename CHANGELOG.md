@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.1.0...v1.2.0) (2026-05-21)
+
+
+### Features
+
+* **ci:** use chronova-agent GitHub App token instead of GITHUB_TOKEN ([d7b229b](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/d7b229b909c8a76c6f245ebd88e5610f98034419))
+
 # [1.1.0](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.0.0...v1.1.0) (2026-05-21)
 
 
