@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.0.0...v1.1.0) (2026-05-21)
+
+
+### Features
+
+* **ci:** add OMP workflows for issue triage, PR labeling, and PR review ([243cdb0](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/243cdb0f8a33f437ecb1ae4578acc64506bc6505))
+
 # 1.0.0 (2026-05-21)
 
 
