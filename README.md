@@ -20,24 +20,8 @@ Automatically sends coding activity heartbeats to your [Chronova](https://chrono
 
 ## Installation
 
-### Option 1: Clone and build
-
 ```bash
-git clone https://github.com/nx-solutions-ug/chronova-pi-plugin.git ~/.projects/chronova-pi-plugin
-cd ~/.projects/chronova-pi-plugin
-npm install
-npm run build
-ln -s ~/.projects/chronova-pi-plugin ~/.omp/agent/extensions/chronova-pi-plugin
-```
-
-### Option 2: Direct symlink (requires Node.js for build)
-
-```bash
-git clone https://github.com/nx-solutions-ug/chronova-pi-plugin.git /tmp/chronova-pi-plugin
-cd /tmp/chronova-pi-plugin
-npm install && npm run build
-mkdir -p ~/.omp/agent/extensions/chronova-pi-plugin
-cp dist/*.js package.json ~/.omp/agent/extensions/chronova-pi-plugin/
+omp plugin install @chronova/pi-plugin
 ```
 
 ## Configuration
