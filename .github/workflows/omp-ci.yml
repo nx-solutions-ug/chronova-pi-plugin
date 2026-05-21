@@ -32,8 +32,15 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
+      - name: Generate app token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Authenticate gh CLI
-        run: echo "${{ github.token }}" | gh auth login --with-token
+        run: echo "${{ steps.app-token.outputs.token }}" | gh auth login --with-token
 
       - name: Install OMP
         shell: bash
@@ -67,8 +74,15 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
+      - name: Generate app token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Authenticate gh CLI
-        run: echo "${{ github.token }}" | gh auth login --with-token
+        run: echo "${{ steps.app-token.outputs.token }}" | gh auth login --with-token
 
       - name: Install OMP
         shell: bash
@@ -128,7 +142,8 @@ jobs:
             const isAgentCommit = author.includes('opencode-agent') || committer.includes('opencode-agent')
               || author.includes('opencode') || committer.includes('opencode')
               || author.includes('github-actions') || committer.includes('github-actions')
-              || author.includes('omp-agent') || committer.includes('omp-agent');
+              || author.includes('omp-agent') || committer.includes('omp-agent')
+              || author.includes('chronova-agent') || committer.includes('chronova-agent');
             return isAgentCommit ? 'false' : 'true';
 
       - name: Determine review type
@@ -156,9 +171,17 @@ jobs:
           fi
           echo "skip=${skip}" >> "$GITHUB_OUTPUT"
 
+      - name: Generate app token
+        if: steps.should-skip.outputs.skip != 'true'
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Authenticate gh CLI
         if: steps.should-skip.outputs.skip != 'true'
-        run: echo "${{ github.token }}" | gh auth login --with-token
+        run: echo "${{ steps.app-token.outputs.token }}" | gh auth login --with-token
 
       - name: Install OMP
         if: steps.should-skip.outputs.skip != 'true'
