@@ -1,18 +1,61 @@
 {
-  "name": "chronova-pi-plugin",
+  "name": "@chronova/pi-plugin",
   "version": "1.0.0",
-  "description": "Chronova heartbeat tracking for oh-my-pi",
+  "description": "Chronova heartbeat tracking extension for oh-my-pi — sends coding activity to your Chronova dashboard via chronova-cli",
   "type": "module",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "private": false,
   "omp": {
     "extensions": [
       "./dist/index.js"
     ]
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "type-check": "tsc --noEmit",
+    "semantic-release": "semantic-release"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "chronova",
+    "oh-my-pi",
+    "omp",
+    "pi-plugin",
+    "wakatime",
+    "heartbeat",
+    "coding-analytics",
+    "developer-analytics",
+    "ai-coding"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nx-solutions-ug/chronova-pi-plugin.git"
+  },
+  "homepage": "https://github.com/nx-solutions-ug/chronova-pi-plugin#readme",
+  "bugs": {
+    "url": "https://github.com/nx-solutions-ug/chronova-pi-plugin/issues"
   },
   "devDependencies": {
     "@oh-my-pi/pi-coding-agent": "^15.1.8",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.3",
+    "@semantic-release/npm": "^12.0.2",
+    "@semantic-release/release-notes-generator": "^14.0.3",
+    "semantic-release": "^24.2.3",
     "typescript": "^5.9.0"
   }
 }
