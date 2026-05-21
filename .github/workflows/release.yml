@@ -4,72 +4,24 @@ on:
   push:
     branches:
       - main
-  pull_request_target:
-    types:
-      - closed
-  release:
-    types:
-      - published
 
 permissions:
   contents: write
   pull-requests: write
-  checks: read
 
 jobs:
-  update-release-draft:
-    name: Update Release Draft
-    if: >-
-      (github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip ci]')) ||
-      (github.event_name == 'pull_request_target' && github.event.pull_request.merged == true)
-    runs-on: ubuntu-latest
-    outputs:
-      draft_tag: ${{ steps.draft-info.outputs.tag }}
-      draft_id: ${{ steps.draft-info.outputs.id }}
-    steps:
-      - name: Generate GitHub App Token
-        id: app-token
-        uses: actions/create-github-app-token@v3
-        continue-on-error: true
-        with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-
-      - name: Draft or update release
-        id: release-drafter
-        uses: release-drafter/release-drafter@v7
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token || secrets.GH_PERSONAL_TOKEN }}
-
-      - name: Extract draft info
-        id: draft-info
-        if: steps.release-drafter.outputs.draft == 'true'
-        run: |
-          echo "tag=${{ steps.release-drafter.outputs.tag_name }}" >> "$GITHUB_OUTPUT"
-          echo "id=$(gh release view ${{ steps.release-drafter.outputs.tag_name }} --json id -q .id)" >> "$GITHUB_OUTPUT"
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GH_PERSONAL_TOKEN }}
-
-  review-and-publish:
-    name: Review & Publish Draft
-    needs: update-release-draft
-    if: needs.update-release-draft.outputs.draft_tag != ''
+  release:
+    name: Release
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           persist-credentials: false
-
-      - name: Generate GitHub App Token
-        id: app-token
-        uses: actions/create-github-app-token@v3
-        continue-on-error: true
-        with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -85,66 +37,6 @@ jobs:
 
       - name: Semantic Release
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token || secrets.GH_PERSONAL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PERSONAL_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
-
-  update-changelog:
-    name: Update CHANGELOG
-    needs: review-and-publish
-    if: always() && needs.review-and-publish.result == 'success'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: Generate GitHub App Token
-        id: app-token
-        uses: actions/create-github-app-token@v3
-        continue-on-error: true
-        with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-
-      - name: Configure git
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GH_PERSONAL_TOKEN }}
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
-
-      - name: Prepend release to CHANGELOG
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GH_PERSONAL_TOKEN }}
-          RELEASE_TAG: ${{ needs.update-release-draft.outputs.draft_tag }}
-        run: |
-          RELEASE_DATA=$(gh release view "$RELEASE_TAG" --json body,publishedAt)
-          RELEASE_BODY=$(echo "$RELEASE_DATA" | jq -r '.body')
-          RELEASE_DATE=$(echo "$RELEASE_DATA" | jq -r '.publishedAt')
-          VERSION="${RELEASE_TAG#v}"
-          DATE=$(echo "$RELEASE_DATE" | cut -dT -f1)
-          COMPARE_URL="https://github.com/${{ github.repository }}/compare/${RELEASE_TAG}"
-
-          {
-            echo "# [${VERSION}](${COMPARE_URL}) (${DATE})"
-            echo ""
-            echo "${RELEASE_BODY}"
-            echo ""
-          } > /tmp/new_entry.txt
-
-          if [ -f CHANGELOG.md ]; then
-            sed -i '1e cat /tmp/new_entry.txt' CHANGELOG.md
-          else
-            cat /tmp/new_entry.txt > CHANGELOG.md
-            echo "" >> CHANGELOG.md
-          fi
-
-      - name: Commit and push CHANGELOG
-        run: |
-          git add CHANGELOG.md
-          git diff --cached --quiet || git commit -m "chore(release): update CHANGELOG.md [skip ci]"
-          git push
