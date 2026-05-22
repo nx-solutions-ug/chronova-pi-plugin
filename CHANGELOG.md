@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.2.2...v1.3.0) (2026-05-22)
+
+
+### Features
+
+* **ci:** delete stale dependency summary comments and link Renovate Dashboard ([04a00ad](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/04a00ad0dfc578edc64b715198c263f345e5bf6d))
+
 ## [1.2.2](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.2.1...v1.2.2) (2026-05-22)
 
 
