@@ -1,3 +1,11 @@
+## [1.2.2](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.2.1...v1.2.2) (2026-05-22)
+
+
+### Bug Fixes
+
+* add label-skip pre-check and run label-pr on synchronize/ready_for_review ([bbbbbc7](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/bbbbbc7deab669b503d8e10bd5ed5bcfce8d12a7))
+* strengthen skip check - never comment, stop immediately when labels exist ([232c811](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/232c811582f8d0bdf5dffaba8c8d18de1643e748))
+
 ## [1.2.1](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.2.0...v1.2.1) (2026-05-22)
 
 
