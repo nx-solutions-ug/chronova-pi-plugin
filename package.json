@@ -1,6 +1,6 @@
 {
   "name": "@chronova/pi-plugin",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Chronova heartbeat tracking extension for oh-my-pi — sends coding activity to your Chronova dashboard via chronova-cli",
   "type": "module",
   "main": "dist/index.js",

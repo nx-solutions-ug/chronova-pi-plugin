@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.2.0...v1.2.1) (2026-05-22)
+
+
+### Bug Fixes
+
+* add dedup check to review-pr command to prevent duplicate comments ([4f69bab](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/4f69bab5d158d1fd4555c7013238a2383befef0c))
+
 # [1.2.0](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.1.0...v1.2.0) (2026-05-21)
 
 
