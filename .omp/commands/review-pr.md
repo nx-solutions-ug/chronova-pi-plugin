@@ -5,12 +5,21 @@ You MUST review PR $ARGUMENTS right now. Do NOT ask for more information — exe
 Before doing anything else, check whether this bot has already posted a review or comment on this PR:
 
 ```bash
-gh api /repos/{owner}/{repo}/issues/$ARGUMENTS/comments --jq '.[] | select(.user.login | test("chronova-agent|omp-agent")) | .body[:50]'
+gh api /repos/{owner}/{repo}/issues/$ARGUMENTS/comments --jq '.[] | select(.user.login | test("chronova-agent|omp-agent")) | "\(.id) \(.body[:80])"'
 ```
 
-If a comment starting with `## Dependency Update Summary` from this bot already exists, print `Skipped PR #$ARGUMENTS: dependency summary already posted.` and stop.
 If a review from this bot already exists, print `Skipped PR #$ARGUMENTS: review already posted.` and stop.
 
+If any comments starting with `## Dependency Update Summary` from this bot exist, delete them so a fresh summary can be posted:
+
+```bash
+COMMENT_IDS=$(gh api /repos/{owner}/{repo}/issues/$ARGUMENTS/comments --jq '.[] | select(.user.login | test("chronova-agent|omp-agent")) | select(.body | startswith("## Dependency Update Summary")) | .id')
+for id in $COMMENT_IDS; do
+  gh api -X DELETE /repos/{owner}/{repo}/issues/comments/$id
+done
+```
+
+Then continue with the review.
 ## Step 1: Read the PR
 
 ```bash
@@ -37,7 +46,17 @@ gh pr diff $ARGUMENTS
 2. For each changed package, research its changelog for: breaking changes, security fixes, deprecations, and peer dependency changes.
 3. Check whether changed APIs or exports are used in `src/`. Search for imports of the changed packages.
 4. Check if peer dependency changes affect other installed packages.
-5. Post a **single** Dependency Update Summary comment using `gh pr comment $ARGUMENTS --body "..."` with this format:
+5. **If the PR author is `renovate[bot]`**, find the Renovate Dashboard issue and include a link in the summary:
+
+```bash
+DASHBOARD_ISSUE=$(gh issue list --search "Renovate Dashboard" --json number --jq '.[0].number')
+```
+
+If found, include a line at the bottom of the summary comment:
+
+> 📋 Tracked in #<issue_number>
+
+6. Post a **single** Dependency Update Summary comment using `gh pr comment $ARGUMENTS --body "..."` with this format:
 
 ```markdown
 ## Dependency Update Summary
@@ -91,5 +110,5 @@ Reviewed PR #$ARGUMENTS (<type>): <APPROVE / REQUEST_CHANGES / COMMENT> — <one
 - Do NOT merge the PR.
 - Deduplicate findings against existing unresolved review threads before posting.
 - Use `gh pr review $ARGUMENTS` for code reviews.
-- Use `gh pr comment $ARGUMENTS` for dependency update tables — exactly ONE comment per review, never post a second if one already exists.
-- You MUST perform the dedup check in Step 0 before any other action. If a matching comment or review already exists, stop immediately and do not post anything.
+- Use `gh pr comment $ARGUMENTS` for dependency update tables — delete older summary comments before posting a fresh one (Step 0 handles this).
+- You MUST perform the dedup check in Step 0 before any other action. If a review from this bot already exists, stop immediately. Old dependency summary comments are deleted in Step 0 so a fresh one can be posted.
