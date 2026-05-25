@@ -36,9 +36,9 @@ jobs:
 
       - name: Generate app token
         id: app-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
-          app-id: ${{ secrets.APP_ID }}
+          client-id: ${{ secrets.APP_CLIENT_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Authenticate gh CLI
@@ -85,4 +85,4 @@ jobs:
       - name: Run OMP
         if: steps.extract-prompt.outputs.has_prompt == 'true'
         shell: bash
-        run: omp -p "$(cat /tmp/omp-prompt.txt)"
+        run: omp --model ollama-cloud/glm-5.1 -p "$(cat /tmp/omp-prompt.txt)"
