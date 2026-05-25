@@ -1,4 +1,4 @@
-You MUST review PR $ARGUMENTS right now. Do NOT ask for more information — execute all steps immediately.
+You MUST review PR $ARGUMENTS right now. Do NOT ask for more information — execute all steps immediately. React with the 👀 to the triggering comment.
 
 ## Step 0: Dedup check
 
@@ -20,6 +20,7 @@ done
 ```
 
 Then continue with the review.
+
 ## Step 1: Read the PR
 
 ```bash
@@ -111,4 +112,5 @@ Reviewed PR #$ARGUMENTS (<type>): <APPROVE / REQUEST_CHANGES / COMMENT> — <one
 - Deduplicate findings against existing unresolved review threads before posting.
 - Use `gh pr review $ARGUMENTS` for code reviews.
 - Use `gh pr comment $ARGUMENTS` for dependency update tables — delete older summary comments before posting a fresh one (Step 0 handles this).
+
 - You MUST perform the dedup check in Step 0 before any other action. If a review from this bot already exists, stop immediately. Old dependency summary comments are deleted in Step 0 so a fresh one can be posted.
