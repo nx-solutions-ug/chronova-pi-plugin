@@ -1,3 +1,11 @@
+## [1.3.1](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.3.0...v1.3.1) (2026-05-25)
+
+
+### Bug Fixes
+
+* **ci:** update OMP auth to use source install + sqlite3 injection ([8093428](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/80934280321da4166bb6653ac9eee00e3b0c3f77))
+* **ci:** update OMP CI auth to use source install + sqlite3 injection ([e57bb42](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/e57bb424909ee27647031012c20c697595feddc6))
+
 # [1.3.0](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.2.2...v1.3.0) (2026-05-22)
 
 
