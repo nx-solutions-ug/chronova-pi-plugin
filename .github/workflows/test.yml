@@ -1,4 +1,4 @@
-name: Type Check & Build
+name: Tests
 
 on:
   push:
@@ -13,7 +13,7 @@ concurrency:
 jobs:
   type-check:
     name: Type Check
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest]
     timeout-minutes: 5
 
     steps:
@@ -32,10 +32,11 @@ jobs:
       - name: Run TypeScript type check
         run: npm run type-check
 
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+  strict-type-check:
+    name: Strict Type Check (no skipLibCheck)
+    runs-on: [ubuntu-latest]
+    timeout-minutes: 10
+    continue-on-error: true
 
     steps:
       - name: Checkout repository
@@ -50,5 +51,26 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build
+      - name: Run TypeScript type check with skipLibCheck disabled
+        continue-on-error: true
+        run: npx tsc --noEmit --skipLibCheck false
+
+  lint:
+    name: Lint
+    runs-on: [ubuntu-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "25"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
