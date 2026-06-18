@@ -48,7 +48,7 @@
     "url": "https://github.com/nx-solutions-ug/chronova-pi-plugin/issues"
   },
   "devDependencies": {
-    "@oh-my-pi/pi-coding-agent": "^15.1.8",
+    "@oh-my-pi/pi-coding-agent": "^16.0.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/git": "^10.0.1",
