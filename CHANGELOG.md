@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.3.1...v1.4.0) (2026-06-18)
+
+
+### Features
+
+* add ESLint configuration matching chronova repo rules ([#13](https://github.com/nx-solutions-ug/chronova-pi-plugin/issues/13)) ([70509a4](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/70509a4232641b2d24245371bdf7ddd84feea3f4))
+
 ## [1.3.1](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.3.0...v1.3.1) (2026-05-25)
 
 
