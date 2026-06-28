@@ -50,7 +50,7 @@ chronova-cli \
   --entity <absolute-file-path> \
   --entity-type file \
   --project-folder <project-directory> \
-  --plugin "oh-my-pi/1.0.0 chronova-pi-plugin/1.0.0" \
+  --plugin "oh-my-pi/<omp-version> chronova-pi-plugin/<plugin-version>" \
   --category "ai coding" \
   --write \                        # for write operations
   --ai-line-changes <net-lines>    # additions - deletions

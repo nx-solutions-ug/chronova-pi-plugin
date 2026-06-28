@@ -1,13 +1,30 @@
 import { execFile } from "node:child_process";
+import { readFileSync } from "node:fs";
 import * as path from "node:path";
+import { VERSION as OMP_VERSION } from "@oh-my-pi/pi-coding-agent";
 import { logger } from "./logger.js";
 import { shouldSendHeartbeat, updateLastHeartbeat } from "./state.js";
 
-const PLUGIN_VERSION = "1.0.0";
 const CLI_PATH = path.join(
   process.env.HOME ?? "/home/dev",
   ".local/bin/chronova-cli"
 );
+
+/**
+ * Plugin version, read from the sibling package.json at module load.
+ * Resolves correctly from both src/ (run by omp) and dist/ (compiled).
+ */
+const PLUGIN_VERSION: string = readPluginVersion();
+
+function readPluginVersion(): string {
+  const pkg = JSON.parse(
+    readFileSync(new URL("../package.json", import.meta.url), "utf8"),
+  ) as { version?: unknown };
+  return typeof pkg.version === "string" ? pkg.version : "0.0.0";
+}
+
+/** User-Agent style string sent to chronova-cli via --plugin. */
+const PLUGIN_ARG = `oh-my-pi/${OMP_VERSION} chronova-pi-plugin/${PLUGIN_VERSION}`;
 
 export interface HeartbeatPayload {
   entity: string;
@@ -26,21 +43,7 @@ export function sendHeartbeat(payload: HeartbeatPayload): void {
     return;
   }
 
-  const args: string[] = [
-    "--entity", payload.entity,
-    "--entity-type", "file",
-    "--project-folder", payload.projectFolder,
-    "--plugin", `oh-my-pi/1.0.0 chronova-pi-plugin/${PLUGIN_VERSION}`,
-    "--category", "ai coding",
-  ];
-
-  if (payload.isWrite) {
-    args.push("--write");
-  }
-
-  if (payload.aiLineChanges !== 0) {
-    args.push("--ai-line-changes", String(payload.aiLineChanges));
-  }
+  const args = buildHeartbeatArgs(payload);
 
   logger.debug("Spawning chronova-cli", { args });
 
@@ -71,21 +74,7 @@ export function sendHeartbeatForce(payload: HeartbeatPayload): void {
     return;
   }
 
-  const args: string[] = [
-    "--entity", payload.entity,
-    "--entity-type", "file",
-    "--project-folder", payload.projectFolder,
-    "--plugin", `oh-my-pi/1.0.0 chronova-pi-plugin/${PLUGIN_VERSION}`,
-    "--category", "ai coding",
-  ];
-
-  if (payload.isWrite) {
-    args.push("--write");
-  }
-
-  if (payload.aiLineChanges !== 0) {
-    args.push("--ai-line-changes", String(payload.aiLineChanges));
-  }
+  const args = buildHeartbeatArgs(payload);
 
   logger.debug("Spawning chronova-cli (forced)", { args });
 
@@ -101,4 +90,28 @@ export function sendHeartbeatForce(payload: HeartbeatPayload): void {
 
   child.unref();
   updateLastHeartbeat(payload.projectFolder);
+}
+
+/**
+ * Build the chronova-cli argv for a heartbeat payload.
+ * Shared by sendHeartbeat and sendHeartbeatForce.
+ */
+function buildHeartbeatArgs(payload: HeartbeatPayload): string[] {
+  const args: string[] = [
+    "--entity", payload.entity,
+    "--entity-type", "file",
+    "--project-folder", payload.projectFolder,
+    "--plugin", PLUGIN_ARG,
+    "--category", "ai coding",
+  ];
+
+  if (payload.isWrite) {
+    args.push("--write");
+  }
+
+  if (payload.aiLineChanges !== 0) {
+    args.push("--ai-line-changes", String(payload.aiLineChanges));
+  }
+
+  return args;
 }
