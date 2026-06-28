@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.4.0...v1.4.1) (2026-06-28)
+
+
+### Bug Fixes
+
+* source plugin and oh-my-pi versions dynamically for User-Agent ([27cea9e](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/27cea9ef5c473c5c25f1579309babd4628259de2))
+
 # [1.4.0](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.3.1...v1.4.0) (2026-06-18)
 
 
