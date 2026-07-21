@@ -1,3 +1,11 @@
+## [1.4.2](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.4.1...v1.4.2) (2026-07-21)
+
+
+### Bug Fixes
+
+* update wiki ([5362bba](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/5362bbab695ccd65abf48a5fb404720e47084f3d))
+* update wiki ([60c6263](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/60c6263423b6274ff741120479a35ee7e9f636b8))
+
 ## [1.4.1](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.4.0...v1.4.1) (2026-06-28)
 
 
