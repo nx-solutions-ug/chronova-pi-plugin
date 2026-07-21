@@ -7,7 +7,7 @@ tags: [build, lint, test, release, typescript]
 
 # Build & test
 
-The plugin is written in TypeScript and compiled to `dist/` for consumption by oh-my-pi.
+The plugin is written in TypeScript and compiled to `dist/` for consumption by oh-my-pi. The published package declares `main: "dist/index.js"` and exposes the extension through `package.json` `omp.extensions`.
 
 ## Scripts
 
@@ -37,7 +37,7 @@ Defined in `package.json`:
 }
 ```
 
-`src/` compiles into `dist/`, which is what oh-my-pi loads via `omp.extensions`.
+`src/` compiles into `dist/`, which is what oh-my-pi loads via `omp.extensions`. The `files` array in `package.json` includes `dist` so the compiled output ships with the npm package.
 
 ## Local development workflow
 
@@ -65,7 +65,7 @@ Defined in `package.json`:
    npm run build
    ```
 
-The `dist/` output is checked into the repository so oh-my-pi can load the extension directly from npm without a post-install build step.
+The `dist/` output is produced locally and loaded by oh-my-pi through the `omp.extensions` entry in `package.json`. Note that `dist/` is listed in `.gitignore` and is not checked into the repository; the published npm package includes `dist/` via the `files` field in `package.json`.
 
 ## Lint rules
 
