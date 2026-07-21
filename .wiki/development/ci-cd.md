@@ -61,9 +61,9 @@ Triggered by the `issue-triaged` repository dispatch event. It reads the issue, 
 - Tags new/reopened issues with `needs-triage`.
 - Auto-assigns new issues and PRs to `niklasschaeffer`.
 
-### `openwiki-update.yml`
+### `update-wiki.yml`
 
-Scheduled daily at 08:00 UTC plus on `push` to `main` and manual dispatch. It builds and runs an OpenWiki fork to update documentation under the `openwiki/` directory and opens a pull request.
+Scheduled daily at 08:00 UTC plus on `push` to `main` and manual dispatch. It installs `@chronova/wiki-agent`, runs it against `.wiki/`, and opens a wiki staging snapshot pull request when content changes exist. If the GitHub Wiki repository is already initialized, it also publishes the flattened wiki output directly to the wiki repo.
 
 ## Agent rules
 
