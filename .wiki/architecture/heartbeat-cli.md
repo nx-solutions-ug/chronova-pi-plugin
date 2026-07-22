@@ -29,7 +29,6 @@ export interface HeartbeatPayload {
   entity: string;          // absolute file path
   projectFolder: string;    // project root from session_start
   isWrite: boolean;         // true for edit/write/ast_edit
-  aiLineChanges: number;    // net additions - deletions
 }
 ```
 
@@ -43,9 +42,8 @@ chronova-cli \
   --entity-type file \
   --project-folder <project-directory> \
   --plugin "oh-my-pi/<omp-version> chronova-pi-plugin/<plugin-version>" \
-  --category "ai coding" \
-  --write \                        # only when isWrite is true
-  --ai-line-changes <net-lines>    # only when net is not zero
+  --category "coding" \
+  --write                           # only when isWrite is true
 ```
 
 The `--plugin` value is a User-Agent style string built from:
@@ -53,17 +51,18 @@ The `--plugin` value is a User-Agent style string built from:
 - `OMP_VERSION` imported from `@oh-my-pi/pi-coding-agent`.
 - `PLUGIN_VERSION` read from `package.json` at module load time.
 
+The server distinguishes AI coding activity from manual activity by checking whether the user-agent string contains `oh-my-pi`, not by the `--category` value.
+
 ## Sending behavior
 
 `sendHeartbeat()`:
 
-1. Checks the per-project rate limit via `shouldSendHeartbeat()`.
-2. Builds arguments.
-3. Spawns `chronova-cli` with `execFile()`.
-4. Calls `child.unref()` so the agent loop is not blocked waiting for the child.
-5. Updates the last-heartbeat timestamp after spawning.
+1. Builds arguments.
+2. Spawns `chronova-cli` with `execFile()`.
+3. Calls `child.unref()` so the agent loop is not blocked waiting for the child.
+4. Updates the last-heartbeat timestamp after spawning.
 
-`sendHeartbeatForce()` does the same thing but bypasses the rate limit. It is used during `session_shutdown` to flush any remaining pending changes.
+`sendHeartbeatForce()` is identical and is used during `session_shutdown` to flush any remaining pending changes. Both functions assume rate-limiting has already been decided by `tryFlush()` in `src/index.ts`; the rate limit itself lives in `shouldSendHeartbeat()` and is enforced only before calling these senders.
 
 ## Logging
 

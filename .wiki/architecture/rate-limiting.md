@@ -60,9 +60,11 @@ if (!shouldSendHeartbeat(projectFolder)) {
 
 Those changes are flushed on the next allowed heartbeat or on `session_shutdown` via `sendHeartbeatForce()`.
 
+Because `shouldSendHeartbeat()` is checked only once per flush in `tryFlush()`, every payload produced during a multi-file flush is sent. Previously the check was duplicated inside the send functions, which caused all but the first payload in a flush to be silently dropped.
+
 ## Force flush
 
-`session_shutdown` bypasses the rate limit entirely. If pending changes exist, they are converted to payloads and sent with `sendHeartbeatForce()`, which updates the last-heartbeat timestamp after each spawn.
+`session_shutdown` bypasses the rate limit entirely. `tryFlush()` is not called; instead any pending changes are converted to payloads and sent with `sendHeartbeatForce()`, which updates the last-heartbeat timestamp after each spawn.
 
 ## Related pages
 

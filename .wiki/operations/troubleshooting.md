@@ -52,7 +52,7 @@ The log includes every heartbeat payload, argument list, `chronova-cli` output, 
    tail -f ~/.chronova-pi-plugin/plugin.log
    ```
 
-4. Remember the rate limit: only one heartbeat per project per minute is sent. Subsequent activity is held in the pending map and flushed later or on shutdown.
+4. Remember the rate limit: only one heartbeat per project per minute is sent. Subsequent activity is held in the pending map and flushed later or on shutdown. Because the rate limit is checked only once per flush, a multi-file flush sends one payload per file; earlier versions silently dropped all but the first payload.
 
 ## Rate-limit behavior looks wrong
 
@@ -72,13 +72,9 @@ To force a reset, stop oh-my-pi and remove the state file for the project. The p
 - Check that `package.json` contains the `omp.extensions` entry pointing to `./dist/index.js`.
 - Restart oh-my-pi after installing or updating the plugin.
 
-## AI line changes look off
+## Category shown as coding instead of AI coding
 
-- For `edit` tool results, the plugin parses unified diff `+`/`-` lines (ignoring `+++ ` and `--- ` headers).
-- For `ast_edit`, the plugin uses the per-file replacement count as additions. If the tool does not report counts, it falls back to one addition per touched file.
-- Net AI line changes are `additions - deletions`.
-
-If a tool reports a diff that includes context or unrelated formatting, the counts will include those lines. This is a best-effort heuristic.
+The plugin sends `--category "coding"`. The Chronova server classifies the heartbeat as AI coding automatically when the user-agent string (built from `--plugin`) contains `oh-my-pi`. If a heartbeat is not marked as AI, verify the `--plugin` argument includes `oh-my-pi/<version>` and check `chronova-cli` forwards it unchanged.
 
 ## Related pages
 
