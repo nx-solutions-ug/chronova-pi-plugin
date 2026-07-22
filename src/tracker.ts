@@ -1,4 +1,5 @@
 import * as path from "node:path";
+import * as os from "node:os";
 import { logger } from "./logger.js";
 import type { HeartbeatPayload } from "./heartbeat.js";
 
@@ -53,12 +54,12 @@ export function trackEdit(details: {
   diff?: string;
   path?: string;
   perFileResults?: Array<{
-    path: string;
+    path?: string;
     diff?: string;
     isError?: boolean;
   }>;
   files?: string[];
-  fileReplacements?: Array<{ path: string; count: number }>;
+  fileReplacements?: Array<{ path?: string; count: number }>;
 }): void {
   if (details.perFileResults && details.perFileResults.length > 0) {
     for (const result of details.perFileResults) {
@@ -112,7 +113,6 @@ export function flushPending(projectFolder: string): HeartbeatPayload[] {
       entity,
       projectFolder,
       isWrite: change.isWrite,
-      aiLineChanges: change.additions - change.deletions,
     });
   }
 
@@ -130,22 +130,58 @@ export function pendingCount(): number {
 
 // --- internal helpers ---
 
-function resolveAbs(filePath: string): string | null {
+function resolveAbs(filePath: string | undefined): string | null {
   if (!filePath) return null;
-  // Already absolute
-  if (path.isAbsolute(filePath)) return filePath;
-  // Resolve relative to cwd — but we don't know cwd here.
-  // The extension context provides cwd; we'll resolve in the entry point.
-  // For now, just return as-is; the caller should pass absolute paths.
-  return filePath;
+  const expanded = expandTilde(filePath);
+  if (path.isAbsolute(expanded)) return expanded;
+  // Relative path — can't resolve without a base directory.
+  // Callers should pass absolute paths from the entry point.
+  return expanded;
 }
 
 /**
  * Resolve a possibly-relative path against a base directory.
+ * Expands leading ~ to the home directory and rejects non-file URIs
+ * (artifact://, memory://, ssh://, etc.) that are not real files.
  */
-export function resolvePath(base: string, filePath: string): string {
-  if (path.isAbsolute(filePath)) return filePath;
-  return path.resolve(base, filePath);
+export function resolvePath(base: string, filePath: string): string | null {
+  if (!filePath) return null;
+
+  // Reject non-file URI schemes — they are not real files on disk
+  if (/^[a-z][a-z0-9+.-]*:\/\//i.test(filePath)) {
+    logger.debug("Skipping non-file URI", { path: filePath });
+    return null;
+  }
+
+  // Strip line/range selectors appended by the read tool (e.g. "foo.ts:50-56")
+  const stripped = stripLineSelector(filePath);
+
+  const expanded = expandTilde(stripped);
+  if (path.isAbsolute(expanded)) return expanded;
+  return path.resolve(base, expanded);
+}
+
+/**
+ * Expand a leading ~ to the user's home directory.
+ * Node's path module does not understand ~ — path.isAbsolute('~') is false,
+ * so without this, paths like '~/.projects/foo' get mangled by path.resolve.
+ */
+function expandTilde(filePath: string): string {
+  if (filePath === "~") return os.homedir();
+  if (filePath.startsWith("~/")) return path.join(os.homedir(), filePath.slice(2));
+  return filePath;
+}
+
+/**
+ * Strip trailing line/range selectors from a file path.
+ * The read tool appends ":50" or ":50-56" or ":50+150" to paths;
+ * these are not part of the actual file path.
+ */
+function stripLineSelector(filePath: string): string {
+  // Only strip if the suffix looks like a line selector: :<digits>[-+]<digits>?
+  const match = filePath.match(/^(.+):(\d+)(?:[-+]\d+)?$/);
+  if (match) return match[1];
+  return filePath;
 }
 
 function mergeChange(absPath: string, change: FileChange): void {

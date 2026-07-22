@@ -25,7 +25,8 @@ export default function chronovaPiPlugin(pi: ExtensionAPI): void {
       case "read": {
         const filePath = input.path as string | undefined;
         if (filePath) {
-          trackRead(resolvePath(projectFolder, filePath));
+          const resolved = resolvePath(projectFolder, filePath);
+          if (resolved) trackRead(resolved);
           tryFlush();
         }
         break;
@@ -36,11 +37,10 @@ export default function chronovaPiPlugin(pi: ExtensionAPI): void {
         if (details) {
           const resolvedDetails = {
             ...details,
-            path: details.path ? resolvePath(projectFolder, details.path) : undefined,
-            perFileResults: details.perFileResults?.map(r => ({
-              ...r,
-              path: resolvePath(projectFolder, r.path),
-            })),
+            path: details.path ? resolvePath(projectFolder, details.path) ?? undefined : undefined,
+            perFileResults: details.perFileResults
+              ?.map(r => ({ ...r, path: resolvePath(projectFolder, r.path) ?? undefined }))
+              .filter(r => r.path !== undefined),
           };
           trackEdit(resolvedDetails);
           tryFlush();
@@ -51,7 +51,8 @@ export default function chronovaPiPlugin(pi: ExtensionAPI): void {
       case "write": {
         const filePath = input.path as string | undefined;
         if (filePath) {
-          trackWrite(resolvePath(projectFolder, filePath));
+          const resolved = resolvePath(projectFolder, filePath);
+          if (resolved) trackWrite(resolved);
           tryFlush();
         }
         break;
@@ -61,11 +62,12 @@ export default function chronovaPiPlugin(pi: ExtensionAPI): void {
         const details = event.details as AstEditDetails | undefined;
         if (details) {
           trackEdit({
-            files: details.files?.map(f => resolvePath(projectFolder, f)),
-            fileReplacements: details.fileReplacements?.map(r => ({
-              ...r,
-              path: resolvePath(projectFolder, r.path),
-            })),
+            files: details.files
+              ?.map(f => resolvePath(projectFolder, f))
+              .filter((f): f is string => f !== null),
+            fileReplacements: details.fileReplacements
+              ?.map(r => ({ ...r, path: resolvePath(projectFolder, r.path) ?? undefined }))
+              .filter(r => r.path !== undefined),
           });
           tryFlush();
         }
