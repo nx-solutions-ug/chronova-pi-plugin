@@ -1,3 +1,10 @@
+## [1.4.3](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.4.2...v1.4.3) (2026-07-22)
+
+
+### Bug Fixes
+
+* resolve mangled paths, invalid category, dropped heartbeats, dead ai-line-changes flag ([50cb780](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/50cb780c8764b937583b6910c4876a811c932d28))
+
 ## [1.4.2](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.4.1...v1.4.2) (2026-07-21)
 
 
