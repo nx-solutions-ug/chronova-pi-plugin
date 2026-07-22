@@ -9,7 +9,12 @@ tags: [tracking, diff, ast-edit, read, write]
 
 The plugin listens to `tool_result` events and extracts file paths and line changes. Only four tool names are handled: `read`, `edit`, `write`, and `ast_edit`.
 
-All file paths are resolved against the project folder captured during `session_start` using `path.resolve()` in `src/tracker.ts`.
+All file paths are resolved against the project folder captured during `session_start` in `src/tracker.ts`:
+
+- A leading `~` is expanded to the user's home directory.
+- Non-file URI schemes (`artifact://`, `memory://`, `ssh://`, etc.) are rejected.
+- Line/range selectors appended by the read tool (e.g. `foo.ts:50-56`) are stripped.
+- Relative paths are resolved with `path.resolve()` against the project folder.
 
 ## `read`
 
@@ -78,16 +83,15 @@ The plugin maps each replacement count to additions and marks the files as write
 - Lines starting with `+` count as additions, except `+++ ` header lines.
 - Lines starting with `-` count as deletions, except `--- ` header lines.
 
-The net AI line change sent to Chronova is `additions - deletions`.
+Line changes are counted locally for logging/observability but are no longer included in the heartbeat payload sent to `chronova-cli`; the server derives AI activity from the user-agent string instead.
 
 ## Merging changes
 
 The pending map (`Map<string, FileChange>`) stores one entry per absolute file path. Multiple tool results for the same file are merged:
 
-- Additions and deletions are summed.
 - Any write flag is sticky (`isWrite` stays true once set).
 
-When the rate limit allows, `flushPending()` converts the map into `HeartbeatPayload` objects and clears the map.
+When the rate limit allows, `flushPending()` converts the map into `HeartbeatPayload` objects (entity, project folder, and write flag) and clears the map.
 
 ## Related pages
 
