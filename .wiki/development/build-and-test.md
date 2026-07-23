@@ -78,6 +78,7 @@ Releases are automated with [semantic-release](https://semantic-release.gitbook.
 - Pushes to `main` trigger the `release.yml` workflow.
 - The workflow first runs `npm run type-check` and `npm run lint`.
 - If those pass, `semantic-release` determines the next version from conventional commits, updates `CHANGELOG.md` and `package.json`, publishes to npm, and creates a GitHub release.
+- A post-release step in `release.yml` then replaces the release body with the full list of commits between the previous tag and the new tag (guarded so no-op releases are skipped), truncated at 120,000 bytes if necessary.
 - Branches `beta` and `alpha` produce pre-releases.
 
 ## Dependency updates
