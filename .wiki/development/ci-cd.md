@@ -32,7 +32,7 @@ Runs on every push to `main`.
    - Verifies npm audit signatures.
    - Runs `npx semantic-release` with an app-generated token and `NPM_TOKEN`.
 
-The release job writes `CHANGELOG.md`, bumps `package.json`, publishes to npm, and creates a GitHub release.
+The release job writes `CHANGELOG.md`, bumps `package.json`, publishes to npm, and creates a GitHub release. A post-release step then overwrites the release body with the full commit list since the previous tag (all commits, not only conventional `feat`/`fix`/`perf` notes). The step captures the latest tag before `semantic-release`, skips the update if the tag did not change, and safely truncates the body at 120,000 bytes with a link to `CHANGELOG.md` when needed.
 
 ## OMP agent workflows
 
