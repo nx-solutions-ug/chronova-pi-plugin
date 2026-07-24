@@ -2,7 +2,7 @@
   <img src="public/banner-flux.png" alt="Chronova Pi Plugin — Heartbeat tracking extension for oh-my-pi" width="100%" />
 </p>
 
-# chronova-pi-plugin
+
 
 Chronova heartbeat tracking extension for [oh-my-pi](https://omp.sh).
 
