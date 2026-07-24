@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.4.3...v1.5.0) (2026-07-24)
+
+
+### Features
+
+* add FLUX 2 Max generated README banner ([f559938](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/f55993823b0b08193ddc923d2232bb3887ff3002))
+
 ## [1.4.3](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.4.2...v1.4.3) (2026-07-22)
 
 
