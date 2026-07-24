@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.5.0...v1.5.1) (2026-07-24)
+
+
+### Bug Fixes
+
+* crop banner to 3:1 ratio for better README display ([4eff73d](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/4eff73d11b1b5b683efb1d2ceb7f9c8de7f86327))
+
 # [1.5.0](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.4.3...v1.5.0) (2026-07-24)
 
 
