@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="public/banner-flux.png" alt="Chronova Pi Plugin — Heartbeat tracking extension for oh-my-pi" width="100%" />
+  <img src="public/banner.png" alt="chronova-pi-plugin — AI Activity & Telemetry Extension for oh-my-pi" width="850" />
 </p>
 
-
+# chronova-pi-plugin
 
 Chronova heartbeat tracking extension for [oh-my-pi](https://omp.sh).
 
