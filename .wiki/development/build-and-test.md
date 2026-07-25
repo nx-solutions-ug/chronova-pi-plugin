@@ -69,7 +69,7 @@ The `dist/` output is produced locally and loaded by oh-my-pi through the `omp.e
 
 ## Lint rules
 
-`eslint.config.js` uses `@eslint/js` and `typescript-eslint` recommended rules, plus a stricter unused-vars rule that ignores names starting with `_`. The `dist/` and `node_modules/` directories are ignored.
+`eslint.config.js` uses `@eslint/js` and `typescript-eslint` recommended rules, plus a stricter unused-vars rule that ignores names starting with `_`. It ignores `node_modules/`, `dist/`, `build/`, `out/`, `.worktrees/`, and any `*.config.js` or `*.config.mjs` files.
 
 ## Release
 
