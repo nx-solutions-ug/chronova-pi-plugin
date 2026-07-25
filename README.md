@@ -2,6 +2,11 @@
   <img src="public/banner.png" alt="chronova-pi-plugin — AI Activity & Telemetry Extension for oh-my-pi" width="850" />
 </p>
 
+[![npm version](https://img.shields.io/npm/v/@chronova/pi-plugin.svg)](https://www.npmjs.com/package/@chronova/pi-plugin)
+[![Tests](https://github.com/nx-solutions-ug/chronova-pi-plugin/actions/workflows/test.yml/badge.svg)](https://github.com/nx-solutions-ug/chronova-pi-plugin/actions/workflows/test.yml)
+[![Release](https://github.com/nx-solutions-ug/chronova-pi-plugin/actions/workflows/release.yml/badge.svg)](https://github.com/nx-solutions-ug/chronova-pi-plugin/actions/workflows/release.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 # chronova-pi-plugin
 
 Chronova heartbeat tracking extension for [oh-my-pi](https://omp.sh).
