@@ -36,7 +36,7 @@ The release job writes `CHANGELOG.md`, bumps `package.json`, publishes to npm, a
 
 ## OMP agent workflows
 
-The repository uses [oh-my-pi](https://omp.sh) as an agent for issue/PR automation. Agent prompts are stored in `.omp/commands/`.
+The repository uses [oh-my-pi](https://omp.sh) as an agent for issue/PR automation. Agent prompts are stored in `.omp/commands/`, and OMP JSONL output is piped through `.omp/stream-log.py` to produce the human-readable CI log lines. The formatter defensively coerces non-string `text` values and non-dict `args` so malformed tool results do not break the pipe.
 
 ### `omp.yml`
 
