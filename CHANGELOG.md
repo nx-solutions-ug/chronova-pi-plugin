@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.6.0...v1.6.1) (2026-07-26)
+
+
+### Bug Fixes
+
+* update actions/checkout to v7 in vouch-manage workflow ([44c2309](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/44c2309c445b86bcd388098c002ca7503e81c23c))
+
 # [1.6.0](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.5.1...v1.6.0) (2026-07-26)
 
 
