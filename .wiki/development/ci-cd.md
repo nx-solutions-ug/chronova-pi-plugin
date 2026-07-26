@@ -65,6 +65,33 @@ Triggered by the `issue-triaged` repository dispatch event. It reads the issue, 
 
 Scheduled daily at 08:00 UTC plus on `push` to `main` and manual dispatch. It installs `@chronova/wiki-agent`, runs it against `.wiki/`, and opens a wiki staging snapshot pull request when content changes exist. If the GitHub Wiki repository is already initialized, it also publishes the flattened wiki output directly to the wiki repo.
 
+## Vouch / PR gate
+
+The repository uses [mitchellh/vouch](https://github.com/mitchellh/vouch) for a lightweight PR gate. Only vouched users, repository collaborators with write access, and bot accounts can open pull requests.
+
+### `vouch-pr.yml`
+
+Runs on `pull_request_target` for `opened`, `reopened`, and `ready_for_review` events.
+
+- Uses `mitchellh/vouch/action/check-pr@v1` with `auto-close: true` and `require-vouch: true`.
+- Auto-closes PRs from unvouched or denounced users.
+- Adds a `vouched` label when the author passes the gate.
+
+Bots (accounts ending with `[bot]`) and collaborators with write access are automatically allowed.
+
+### `vouch-manage.yml`
+
+Runs on `discussion_comment` events. Maintainers with `admin`, `maintain`, or `write` roles can manage the vouch list by commenting on a discussion:
+
+| Command | Effect |
+| --- | --- |
+| `!vouch` | Vouch the discussion author |
+| `!vouch @user` | Vouch a specific user |
+| `!denounce @user` | Block a user from contributing |
+| `!unvouch @user` | Remove a user from the vouched list |
+
+The vouched list is stored in `.github/VOUCHED.td`. Contributors request a vouch by opening a discussion describing their proposed contribution; see [`CONTRIBUTING.md`](../../CONTRIBUTING.md) for details.
+
 ## Agent rules
 
 Additional constraints for OMP are stored in `.omp/rules/`:
