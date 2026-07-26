@@ -72,6 +72,8 @@ Runs on `pull_request_target` for `opened`, `reopened`, and `ready_for_review` e
 
 Because it uses `pull_request_target`, the workflow can act on fork PRs with repository secrets.
 
+The vouch list itself is maintained in `.github/VOUCHED.td`. Bots and users with write access are automatically allowed, so the file only needs entries for external contributors.
+
 ### `vouch-manage.yml`
 
 Runs on `discussion_comment` events. Maintainers with `admin`, `maintain`, or `write` roles can vouch or denounce users by commenting on a Discussion:
