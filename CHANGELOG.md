@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.5.1...v1.6.0) (2026-07-26)
+
+
+### Bug Fixes
+
+* **issue-76:** prevent stream-log.py from crashing on non-dict args or non-string text ([01d7304](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/01d7304592bec694bd3eae4ba53c304bcc170c23))
+
+
+### Features
+
+* add lightweight vouch system for PR gating via discussions ([0979c4f](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/0979c4fce142f89bc891c6911b9bc1e9b2c1b4b9))
+
 ## [1.5.1](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.5.0...v1.5.1) (2026-07-24)
 
 
