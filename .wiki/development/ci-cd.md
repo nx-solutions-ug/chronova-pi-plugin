@@ -61,6 +61,28 @@ Triggered by the `issue-triaged` repository dispatch event. It reads the issue, 
 - Tags new/reopened issues with `needs-triage`.
 - Auto-assigns new issues and PRs to `niklasschaeffer`.
 
+### `vouch-pr.yml`
+
+Runs on `pull_request_target` for `opened`, `reopened`, and `ready_for_review` events. It gates external contributions with [mitchellh/vouch](https://github.com/mitchellh/vouch):
+
+- Automatically allows bots and users with write access.
+- Requires a vouch for other contributors.
+- Auto-closes PRs from unvouched or denounced users.
+- Adds a `vouched` label when the check passes.
+
+Because it uses `pull_request_target`, the workflow can act on fork PRs with repository secrets.
+
+### `vouch-manage.yml`
+
+Runs on `discussion_comment` events. Maintainers with `admin`, `maintain`, or `write` roles can vouch or denounce users by commenting on a Discussion:
+
+- `!vouch` — vouch the discussion author.
+- `!vouch @user [reason]` — vouch a specific user.
+- `!denounce [@user] [reason]` — denounce a user.
+- `!unvouch [@user]` — remove a vouch.
+
+The workflow uses the `mitchellh/vouch/action/manage-by-discussion` action.
+
 ### `update-wiki.yml`
 
 Scheduled daily at 08:00 UTC plus on `push` to `main` and manual dispatch. It installs `@chronova/wiki-agent`, runs it against `.wiki/`, and opens a wiki staging snapshot pull request when content changes exist. If the GitHub Wiki repository is already initialized, it also publishes the flattened wiki output directly to the wiki repo.
