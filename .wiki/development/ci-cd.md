@@ -40,7 +40,7 @@ The repository uses [oh-my-pi](https://omp.sh) as an agent for issue/PR automati
 
 ### `omp.yml`
 
-Triggered by issue or PR review comments containing `/omp`. It installs OMP from source, authenticates against `ollama-cloud`, and runs the requested command.
+Triggered by issue or PR review comments containing `/omp`. It installs OMP from source, installs the `gh-pr-review` extension for posting inline review comments, authenticates against `ollama-cloud`, and runs the requested command.
 
 ### `omp-ci.yml`
 
@@ -48,7 +48,7 @@ Triggered by new/reopened issues and PR events (`opened`, `synchronize`, `ready_
 
 - **triage-issue** — classifies the issue, sets type/priority fields, applies labels, and dispatches `omp-fix-issue`.
 - **label-pr** — applies type and priority labels if not already present.
-- **review-pr** — reviews PRs, with special handling for dependency and bot-authored PRs. Skips re-review if the latest commit is from a known agent/bot.
+- **review-pr** — reviews PRs, with special handling for dependency and bot-authored PRs. Skips re-review if the latest commit is from a known agent/bot. Inline review comments are posted through the `gh-pr-review` extension (`agynio/gh-pr-review`) installed at the start of the job, not through the native `gh pr review` command.
 
 ### `omp-fix-issue.yml`
 
