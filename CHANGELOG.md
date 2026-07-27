@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.6.1...v1.6.2) (2026-07-27)
+
+
+### Bug Fixes
+
+* **omp:** ensure /omp PR commands commit and push changes ([#85](https://github.com/nx-solutions-ug/chronova-pi-plugin/issues/85)) ([c5641b2](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/c5641b26e905098c358fc8968a8c6550ee229ace)), closes [nx-solutions-ug/chronova#637](https://github.com/nx-solutions-ug/chronova/issues/637)
+
 ## [1.6.1](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.6.0...v1.6.1) (2026-07-26)
 
 
