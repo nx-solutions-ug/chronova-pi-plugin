@@ -9,6 +9,10 @@ tags: [ci, cd, github-actions, automation]
 
 All automation lives in `.github/workflows/`. The repository uses a GitHub App (`chronova-agent`) for elevated token access in several workflows.
 
+## GitHub App tokens
+
+Workflows that need to write issues, pull requests, discussions, or releases generate a short-lived token with the `actions/create-github-app-token@v3` action using the repository secrets `APP_CLIENT_ID` and `APP_PRIVATE_KEY`. The workflows then pass that token to `gh` CLI steps or to third-party actions (for example, `mitchellh/vouch`). Workflows that generate an app token also declare `id-token: write` permission so the action can mint the token. This pattern is used in `vouch-pr.yml`, `vouch-manage.yml`, `auto-manage.yml`, `omp.yml`, `omp-ci.yml`, `omp-fix-issue.yml`, `release.yml`, and `update-wiki.yml`.
+
 ## Quality workflows
 
 ### `test.yml`
