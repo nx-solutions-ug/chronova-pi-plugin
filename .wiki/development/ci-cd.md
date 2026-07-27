@@ -42,6 +42,8 @@ The repository uses [oh-my-pi](https://omp.sh) as an agent for issue/PR automati
 
 Triggered by issue or PR review comments containing `/omp`. It installs OMP from source, authenticates against `ollama-cloud`, and runs the requested command.
 
+For freeform PR comments (not recognized commands), the workflow appends `.omp/commands/_pr-commit-push.md` to the prompt so the agent checks out the PR branch, runs quality gates, and **commits and pushes changes back to the PR branch** instead of ending its turn unstaged (see PR #85).
+
 ### `omp-ci.yml`
 
 Triggered by new/reopened issues and PR events (`opened`, `synchronize`, `ready_for_review`). It contains three conditional jobs:
@@ -72,7 +74,7 @@ Runs on `pull_request_target` for `opened`, `reopened`, and `ready_for_review` e
 
 Because it uses `pull_request_target`, the workflow can act on fork PRs with repository secrets.
 
-The vouch list itself is maintained in `.github/VOUCHED.td`. Bots and users with write access are automatically allowed, so the file only needs entries for external contributors.
+The vouch list itself is maintained in `.github/VOUCHED.td`. Bots and users with write access are automatically allowed, so the file only needs entries for external contributors. The file format is one handle per line (without `@`), sorted alphabetically; prefix a line with `-` to denote a denounced user.
 
 ### `vouch-manage.yml`
 
