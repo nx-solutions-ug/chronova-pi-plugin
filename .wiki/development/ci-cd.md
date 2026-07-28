@@ -48,7 +48,7 @@ Triggered by new/reopened issues and PR events (`opened`, `synchronize`, `ready_
 
 - **triage-issue** — classifies the issue, sets type/priority fields, applies labels, and dispatches `omp-fix-issue`.
 - **label-pr** — applies type and priority labels if not already present.
-- **review-pr** — reviews PRs, with special handling for dependency and bot-authored PRs. Skips re-review if the latest commit is from a known agent/bot.
+- **review-pr** — reviews PRs, with special handling for dependency and bot-authored PRs. Skips re-review if the latest commit is from a known agent/bot. The review command deduplicates new findings against the bot's existing unresolved review threads, including prior reviews in the `APPROVED` state.
 
 ### `omp-fix-issue.yml`
 
