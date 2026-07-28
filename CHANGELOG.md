@@ -1,3 +1,15 @@
+# [1.7.0](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.6.3...v1.7.0) (2026-07-28)
+
+
+### Bug Fixes
+
+* include APPROVED state in review thread dedup filter ([239428b](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/239428b843ce1d3b67ce2ce57dd6d38c5e87f487))
+
+
+### Features
+
+* add eyes reaction to /omp trigger comments ([f88fe2d](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/f88fe2d724585f579ae801d5b2c362f6fc3c157c))
+
 ## [1.6.3](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.6.2...v1.6.3) (2026-07-28)
 
 
