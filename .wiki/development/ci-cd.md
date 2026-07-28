@@ -44,11 +44,13 @@ Triggered by issue or PR review comments containing `/omp`. It installs OMP from
 
 ### `omp-ci.yml`
 
-Triggered by new/reopened issues and PR events (`opened`, `synchronize`, `ready_for_review`). It contains three conditional jobs:
+Triggered by new/reopened issues and PR events (`opened`, `synchronize`, `ready_for_review`, `closed`). It contains three conditional jobs when a PR is active, plus two cancellation jobs:
 
 - **triage-issue** — classifies the issue, sets type/priority fields, applies labels, and dispatches `omp-fix-issue`.
 - **label-pr** — applies type and priority labels if not already present.
 - **review-pr** — reviews PRs, with special handling for dependency and bot-authored PRs. Skips re-review if the latest commit is from a known agent/bot.
+- **cancel-review-on-close** — cancels any in-progress `review-pr` run when its PR is merged or closed.
+- **cancel-label-on-close** — cancels any in-progress `label-pr` run when its PR is merged or closed.
 
 ### `omp-fix-issue.yml`
 
