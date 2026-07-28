@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.6.2...v1.6.3) (2026-07-28)
+
+
+### Bug Fixes
+
+* resolve review threads and approve PR when all findings addressed ([cea0fc9](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/cea0fc9f1863fcf86b108a53e543f3c9b6170617))
+
 ## [1.6.2](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.6.1...v1.6.2) (2026-07-27)
 
 
