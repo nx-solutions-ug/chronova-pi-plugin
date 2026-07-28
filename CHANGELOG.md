@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.0...v1.7.1) (2026-07-28)
+
+
+### Bug Fixes
+
+* **ci:** cancel omp-ci workflows when PR is merged ([6d261a8](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/6d261a82839e629e51ddfd8140ebed80cc94cc86))
+
 # [1.7.0](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.6.3...v1.7.0) (2026-07-28)
 
 
