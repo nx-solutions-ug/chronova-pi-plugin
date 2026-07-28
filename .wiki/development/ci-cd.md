@@ -42,13 +42,22 @@ The repository uses [oh-my-pi](https://omp.sh) as an agent for issue/PR automati
 
 Triggered by issue or PR review comments containing `/omp`. It installs OMP from source, authenticates against `ollama-cloud`, and runs the requested command.
 
+Command routing:
+
+- A comment starting with `/omp <command>` loads the matching prompt from `.omp/commands/<command>.md`, substituting `$ARGUMENTS` with the rest of the line.
+- Comments that do not match a command file are treated as a freeform prompt. For PRs, the prompt is appended with commit and push instructions (from `.omp/commands/_pr-commit-push.md`) so changes are persisted to the PR branch.
+
+The workflow reacts with an `eyes` emoji on the triggering comment before running the agent.
+
 ### `omp-ci.yml`
 
-Triggered by new/reopened issues and PR events (`opened`, `synchronize`, `ready_for_review`). It contains three conditional jobs:
+Triggered by new/reopened issues and PR events (`opened`, `synchronize`, `ready_for_review`, `closed`). It contains three conditional jobs:
 
 - **triage-issue** — classifies the issue, sets type/priority fields, applies labels, and dispatches `omp-fix-issue`.
 - **label-pr** — applies type and priority labels if not already present.
 - **review-pr** — reviews PRs, with special handling for dependency and bot-authored PRs. Skips re-review if the latest commit is from a known agent/bot.
+
+When a pull request is `closed`, two extra jobs cancel any in-flight `label-pr` or `review-pr` runs for that PR by claiming their concurrency groups with `cancel-in-progress: true`.
 
 ### `omp-fix-issue.yml`
 

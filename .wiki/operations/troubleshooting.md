@@ -52,7 +52,7 @@ The log includes every heartbeat payload, argument list, `chronova-cli` output, 
    tail -f ~/.chronova-pi-plugin/plugin.log
    ```
 
-4. Remember the rate limit: only one heartbeat per project per minute is sent. Subsequent activity is held in the pending map and flushed later or on shutdown. Because the rate limit is checked only once per flush, a multi-file flush sends one payload per file; earlier versions silently dropped all but the first payload.
+4. Remember the rate limit: only one flush per project per minute is triggered. Subsequent activity is held in the pending map and flushed later or on shutdown. A single flush can contain multiple files, sending one payload per file.
 
 ## Rate-limit behavior looks wrong
 
