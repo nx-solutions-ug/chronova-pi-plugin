@@ -7,7 +7,7 @@ tags: [ci, cd, github-actions, automation]
 
 # CI/CD
 
-All automation lives in `.github/workflows/`. The repository uses a GitHub App (`chronova-agent`) for elevated token access in several workflows.
+All automation lives in `.github/workflows/`. The repository uses a GitHub App (`chronova-agent`) for elevated token access in several workflows. Agent prompts and rules are stored under `.omp/`, and the project depends on `@oh-my-pi/pi-coding-agent` `^17.2.2` (see `package.json`).
 
 ## Quality workflows
 
