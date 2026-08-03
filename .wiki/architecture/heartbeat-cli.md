@@ -60,9 +60,10 @@ The server distinguishes AI coding activity from manual activity by checking whe
 1. Builds arguments.
 2. Spawns `chronova-cli` with `execFile()`.
 3. Calls `child.unref()` so the agent loop is not blocked waiting for the child.
-4. Updates the last-heartbeat timestamp after spawning.
+4. Logs `stdout` at `DEBUG` and `stderr` at `WARN`.
+5. Updates the last-heartbeat timestamp after spawning.
 
-`sendHeartbeatForce()` is identical and is used during `session_shutdown` to flush any remaining pending changes. Both functions assume rate-limiting has already been decided by `tryFlush()` in `src/index.ts`; the rate limit itself lives in `shouldSendHeartbeat()` and is enforced only before calling these senders.
+`sendHeartbeatForce()` is nearly the same but is used during `session_shutdown` to flush any remaining pending changes; it only logs `stderr` (no `stdout` output). Both functions assume rate-limiting has already been decided by `tryFlush()` in `src/index.ts`; the rate limit itself lives in `shouldSendHeartbeat()` and is enforced only before calling these senders.
 
 ## Logging
 
