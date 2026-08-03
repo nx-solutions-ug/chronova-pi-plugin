@@ -18,7 +18,7 @@ Defined in `package.json`:
 | `build` | `tsc` | Compile `src/` to `dist/` using `tsconfig.json`. |
 | `prepublishOnly` | `npm run build` | Build before publishing to npm. |
 | `type-check` | `tsc --noEmit` | Validate types without emitting files. |
-| `lint` | `eslint .` | Run ESLint over the project. |
+| `lint` | `eslint .` | Run ESLint over the project (see [Lint rules](#lint-rules)). |
 
 ## TypeScript configuration
 
@@ -69,7 +69,18 @@ The `dist/` output is produced locally and loaded by oh-my-pi through the `omp.e
 
 ## Lint rules
 
-`eslint.config.js` uses `@eslint/js` and `typescript-eslint` recommended rules, plus a stricter unused-vars rule that ignores names starting with `_`. The `dist/` and `node_modules/` directories are ignored.
+`eslint.config.js` uses `typescript-eslint`'s flat config helper to combine `@eslint/js` recommended rules with `typescript-eslint` recommended rules. It also declares a small set of runtime globals as `readonly` — `process`, `console`, `fetch`, `Buffer`, and `setTimeout`.
+
+Ignored paths include `node_modules/**`, `dist/**`, `build/**`, `out/**`, `.worktrees/**`, and all `*.config.js` / `*.config.mjs` files.
+
+One custom rule tightens `@typescript-eslint/no-unused-vars` to `error`, ignoring any argument or variable whose name starts with `_`:
+
+```js
+"@typescript-eslint/no-unused-vars": [
+  "error",
+  { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+]
+```
 
 ## Release
 
@@ -83,7 +94,25 @@ Releases are automated with [semantic-release](https://semantic-release.gitbook.
 
 ## Dependency updates
 
-`renovate.json` extends Renovate's recommended config and auto-merges minor/patch updates with a squash strategy.
+`renovate.json` extends Renovate's `config:recommended` preset and auto-merges minor and patch updates with a squash strategy:
+
+```json
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeStrategy": "squash"
+    }
+  ]
+}
+```
+
+## Tooling versions
+
+The project pins TypeScript tooling via `package.json` `devDependencies`. ESLint is configured through `eslint.config.js` using `@eslint/js` and `typescript-eslint`; Renovate handles patch/minor dependency bumps automatically. `package.json` currently declares `typescript-eslint` at `^8.61.1`; verify `package-lock.json` for the exact resolved version.
 
 ## Related pages
 
