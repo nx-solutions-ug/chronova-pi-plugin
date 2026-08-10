@@ -112,7 +112,7 @@ Releases are automated with [semantic-release](https://semantic-release.gitbook.
 
 ## Tooling versions
 
-The project pins TypeScript tooling via `package.json` `devDependencies`. ESLint is configured through `eslint.config.js` using `@eslint/js` and `typescript-eslint`; Renovate handles patch/minor dependency bumps automatically. `package.json` currently declares `eslint` at `^10.0.0` and `typescript-eslint` at `^8.61.1`; verify `package-lock.json` for the exact resolved versions.
+The project pins TypeScript tooling via `package.json` `devDependencies`. ESLint is configured through `eslint.config.js` using `@eslint/js` and `typescript-eslint`; Renovate handles patch/minor dependency bumps automatically. `package.json` declares `eslint` at `^10.0.0` and `typescript-eslint` at `^8.61.1`. Renovate has bumped the resolved lockfile version to `8.67.0` (commit `ce385a5`); verify `package-lock.json` for the exact resolved version at any given point.
 
 ## Related pages
 
