@@ -35,13 +35,11 @@ oh-my-pi loads the compiled extension from `./dist/index.js` as declared in `pac
 The plugin expects the binary at a fixed location unless you change the source:
 
 ```bash
-which chronova-cli
-# expected: ~/.local/bin/chronova-cli
-
-chronova-cli --version
+ls -l ~/.local/bin/chronova-cli
+~/.local/bin/chronova-cli --version
 ```
 
-If the CLI is not installed or not on PATH, heartbeats will fail silently (errors are logged; see [Troubleshooting](./operations/troubleshooting.md)).
+If the CLI is not installed at `~/.local/bin/chronova-cli`, heartbeats will fail silently (errors are logged; see [Troubleshooting](./operations/troubleshooting.md)).
 
 ## Configure your API key
 
@@ -82,3 +80,4 @@ Open your Chronova dashboard after a few minutes of activity; you should see fil
 - Learn the internals in [Architecture overview](./architecture/overview.md).
 - Understand how each tool result is interpreted in [Event tracking](./architecture/event-tracking.md).
 - Read about debug logging and common issues in [Troubleshooting](./operations/troubleshooting.md).
+- Read the contribution guidelines in [CONTRIBUTING.md](../CONTRIBUTING.md).

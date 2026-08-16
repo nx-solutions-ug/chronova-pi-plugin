@@ -61,7 +61,7 @@ The plugin registers three event handlers:
 Rate-limiting happens in two places:
 
 - `src/state.ts` decides whether enough time has passed since the last heartbeat for a given project (60 seconds).
-- `tryFlush()` in `src/index.ts` only calls `flushPending()` when `shouldSendHeartbeat()` returns true. If rate-limited, changes stay in the pending map for the next opportunity. The rate-limit check is performed only here; `sendHeartbeat()` and `sendHeartbeatForce()` do not re-check it.
+- `tryFlush()` in `src/index.ts` only calls `flushPending()` when `shouldSendHeartbeat()` returns true. If rate-limited, changes stay in the pending map for the next opportunity. The rate-limit check is performed only here; `sendHeartbeat()` and `sendHeartbeatForce()` do not re-check it and update the last-heartbeat timestamp after spawning.
 
 ## Design principles
 
@@ -69,6 +69,7 @@ Rate-limiting happens in two places:
 - **Best-effort**: failures are logged but never thrown back into oh-my-pi.
 - **Per-project**: rate-limit state is keyed by project folder and persisted across restarts.
 - **Aggregating**: multiple edits to the same file within a window are merged into one heartbeat that reports whether the file was written.
+- **Minimal payload**: only the absolute file path, project folder, and a write flag are forwarded; line-change counts are used only locally for logging.
 
 ## Related pages
 

@@ -69,7 +69,7 @@ If the file already has accumulated edits, `trackWrite()` simply sets `isWrite =
 
 ## `ast_edit`
 
-`ast_edit` does not provide a diff. Instead it reports:
+`ast_edit` reports:
 
 - `details.files` — the list of files touched.
 - `details.fileReplacements` — per-file replacement counts.
@@ -83,7 +83,7 @@ The plugin maps each replacement count to additions and marks the files as write
 - Lines starting with `+` count as additions, except `+++ ` header lines.
 - Lines starting with `-` count as deletions, except `--- ` header lines.
 
-Line changes are counted locally for logging/observability but are no longer included in the heartbeat payload sent to `chronova-cli`; the server derives AI activity from the user-agent string instead.
+Line changes are counted locally for logging/observability but are not included in the heartbeat payload sent to `chronova-cli`; the server derives AI activity from the user-agent string instead.
 
 ## Merging changes
 

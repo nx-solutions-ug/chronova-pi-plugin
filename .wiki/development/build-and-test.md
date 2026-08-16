@@ -88,7 +88,7 @@ Releases are automated with [semantic-release](https://semantic-release.gitbook.
 
 - Pushes to `main` trigger the `release.yml` workflow.
 - The workflow first runs `npm run type-check` and `npm run lint`.
-- If those pass, `semantic-release` determines the next version from conventional commits, updates `CHANGELOG.md` and `package.json`, publishes to npm, and creates a GitHub release.
+- If those pass, `semantic-release` determines the next version from conventional commits, updates `CHANGELOG.md`, `package.json`, and `package-lock.json`, publishes to npm, and creates a GitHub release.
 - A post-release step in `release.yml` then replaces the release body with the full list of commits between the previous tag and the new tag (guarded so no-op releases are skipped), truncated at 120,000 bytes if necessary.
 - Branches `beta` and `alpha` produce pre-releases.
 
@@ -112,9 +112,10 @@ Releases are automated with [semantic-release](https://semantic-release.gitbook.
 
 ## Tooling versions
 
-The project pins TypeScript tooling via `package.json` `devDependencies`. ESLint is configured through `eslint.config.js` using `@eslint/js` and `typescript-eslint`; Renovate handles patch/minor dependency bumps automatically. `package.json` currently declares `eslint` at `^10.0.0`, `typescript-eslint` at `^8.61.1`, and `@oh-my-pi/pi-coding-agent` at `^17.0.0` (resolved to `17.3.5` in `package-lock.json`); verify `package-lock.json` for the exact resolved versions of all pinned dependencies.
+The project pins TypeScript tooling via `package.json` `devDependencies`. ESLint is configured through `eslint.config.js` using `@eslint/js` and `typescript-eslint`; Renovate handles patch/minor dependency bumps automatically. `package.json` currently declares `@oh-my-pi/pi-coding-agent` at `^17.0.0` (resolved to `17.3.5` in `package-lock.json`); verify `package-lock.json` for the exact resolved versions of all pinned dependencies.
 
 ## Related pages
 
 - [CI/CD](./ci-cd.md)
 - [Architecture overview](../architecture/overview.md)
+- [Contributing guidelines](../../CONTRIBUTING.md)

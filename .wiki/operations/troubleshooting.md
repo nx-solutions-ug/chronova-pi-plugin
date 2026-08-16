@@ -74,7 +74,7 @@ To force a reset, stop oh-my-pi and remove the state file for the project. The p
 
 ## Category shown as coding instead of AI coding
 
-The plugin sends `--category "coding"`. The Chronova server classifies the heartbeat as AI coding automatically when the user-agent string (built from `--plugin`) contains `oh-my-pi`. If a heartbeat is not marked as AI, verify the `--plugin` argument includes `oh-my-pi/<version>` and check `chronova-cli` forwards it unchanged.
+The plugin sends `--category "coding"`. The Chronova server classifies the heartbeat as AI coding automatically when the user-agent string (built from `--plugin`) contains `oh-my-pi`. If a heartbeat is not marked as AI, verify the `--plugin` argument includes `oh-my-pi/<version>` in the plugin log and check that `chronova-cli` forwards it unchanged.
 
 ## Related pages
 
@@ -82,3 +82,4 @@ The plugin sends `--category "coding"`. The Chronova server classifies the heart
 - [Event tracking](../architecture/event-tracking.md)
 - [Heartbeat CLI invocation](../architecture/heartbeat-cli.md)
 - [Rate limiting & state](../architecture/rate-limiting.md)
+- [Contributing guidelines](../../CONTRIBUTING.md)
