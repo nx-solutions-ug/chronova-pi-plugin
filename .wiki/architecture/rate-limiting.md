@@ -60,7 +60,7 @@ if (!shouldSendHeartbeat(projectFolder)) {
 
 Those changes are flushed on the next allowed heartbeat or on `session_shutdown` via `sendHeartbeatForce()`.
 
-Because `shouldSendHeartbeat()` is checked only once per flush in `tryFlush()`, every payload produced during a multi-file flush is sent. Previously the check was duplicated inside the send functions, which caused all but the first payload in a flush to be silently dropped.
+Because `shouldSendHeartbeat()` is checked only once per flush in `tryFlush()`, every payload produced during a multi-file flush is sent. If the pending map contains many files, `flushPending()` produces one payload per file and all are sent in the same flush window.
 
 ## Force flush
 

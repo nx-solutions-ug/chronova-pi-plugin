@@ -20,7 +20,7 @@ const CLI_PATH = path.join(
 );
 ```
 
-Make sure `chronova-cli` is installed there and executable. The plugin does not search PATH.
+Make sure `chronova-cli` is installed there and executable. The plugin does not search PATH, and `~/.local/bin` does not need to be on the host PATH for the spawn to succeed.
 
 ## Payload shape
 
@@ -62,7 +62,7 @@ The server distinguishes AI coding activity from manual activity by checking whe
 3. Calls `child.unref()` so the agent loop is not blocked waiting for the child.
 4. Updates the last-heartbeat timestamp after spawning.
 
-`sendHeartbeatForce()` is identical and is used during `session_shutdown` to flush any remaining pending changes. Both functions assume rate-limiting has already been decided by `tryFlush()` in `src/index.ts`; the rate limit itself lives in `shouldSendHeartbeat()` and is enforced only before calling these senders.
+`sendHeartbeatForce()` is identical and is used during `session_shutdown` to flush any remaining pending changes. Both functions update the last-heartbeat state after spawning. The rate-limit decision is made by `tryFlush()` in `src/index.ts`; `sendHeartbeat()` and `sendHeartbeatForce()` do not re-check it.
 
 ## Logging
 
