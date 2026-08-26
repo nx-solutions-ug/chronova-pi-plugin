@@ -24,9 +24,11 @@ A `read` tool result is treated as a file view with zero line changes.
 case "read": {
   const filePath = input.path as string | undefined;
   if (filePath) {
-    trackRead(resolvePath(projectFolder, filePath));
+    const resolved = resolvePath(projectFolder, filePath);
+    if (resolved) trackRead(resolved);
     tryFlush();
   }
+  break;
 }
 ```
 
@@ -59,9 +61,11 @@ A `write` tool result marks the file as a write operation with no line changes:
 case "write": {
   const filePath = input.path as string | undefined;
   if (filePath) {
-    trackWrite(resolvePath(projectFolder, filePath));
+    const resolved = resolvePath(projectFolder, filePath);
+    if (resolved) trackWrite(resolved);
     tryFlush();
   }
+  break;
 }
 ```
 
