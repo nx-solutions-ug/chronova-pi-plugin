@@ -62,14 +62,14 @@ The server distinguishes AI coding activity from manual activity by checking whe
 3. Calls `child.unref()` so the agent loop is not blocked waiting for the child.
 4. Updates the last-heartbeat timestamp after spawning.
 
-`sendHeartbeatForce()` is identical and is used during `session_shutdown` to flush any remaining pending changes. Both functions update the last-heartbeat state after spawning. The rate-limit decision is made by `tryFlush()` in `src/index.ts`; `sendHeartbeat()` and `sendHeartbeatForce()` do not re-check it.
+`sendHeartbeatForce()` is used during `session_shutdown` to flush any remaining pending changes. It is otherwise identical to `sendHeartbeat()` except that it does not log `stdout`. Both functions update the last-heartbeat state after spawning. The rate-limit decision is made by `tryFlush()` in `src/index.ts`; `sendHeartbeat()` and `sendHeartbeatForce()` do not re-check it.
 
 ## Logging
 
 The plugin logs:
 
 - The full argument list at `DEBUG` level before spawning.
-- `stdout` at `DEBUG`.
+- `stdout` at `DEBUG` (`sendHeartbeat()` only; forced flushes do not log stdout).
 - `stderr` at `WARN`.
 - Spawn errors at `ERROR`.
 
