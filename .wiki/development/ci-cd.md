@@ -1,8 +1,11 @@
 ---
 type: development
 title: CI/CD
-description: GitHub Actions workflows that test, release, and run OMP agents for this repository.
-tags: [ci, cd, github-actions, automation]
+description: GitHub Actions workflows that test, release, and run OMP agents for
+  this repository.
+tags: [ ci, cd, github-actions, automation ]
+last_updated: 2026-08-28T09:10:36.036Z
+updated_by: wiki-agent
 ---
 
 # CI/CD
@@ -55,7 +58,7 @@ Triggered by new/reopened issues and PR events (`opened`, `synchronize`, `ready_
 
 - **triage-issue** — classifies the issue, sets type/priority fields, applies labels, and dispatches `omp-fix-issue`.
 - **label-pr** — applies type and priority labels if not already present.
-- **review-pr** — reviews PRs, with special handling for dependency and bot-authored PRs. Skips re-review if the latest commit is from a known agent/bot.
+- **review-pr** — reviews PRs, with special handling for dependency and bot-authored PRs. Skips re-review if the latest commit is from a known agent/bot. Runs with `contents: write` permission so review threads can be resolved.
 
 When a pull request is `closed`, two extra jobs cancel any in-flight `label-pr` or `review-pr` runs for that PR by claiming their concurrency groups with `cancel-in-progress: true`.
 
