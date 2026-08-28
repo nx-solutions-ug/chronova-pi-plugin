@@ -1,8 +1,11 @@
 ---
 type: development
 title: CI/CD
-description: GitHub Actions workflows that test, release, and run OMP agents for this repository.
-tags: [ci, cd, github-actions, automation]
+description: GitHub Actions workflows that test, release, and run OMP agents for
+  this repository.
+tags: [ ci, cd, github-actions, automation ]
+last_updated: 2026-08-28T09:54:13.159Z
+updated_by: wiki-agent
 ---
 
 # CI/CD
@@ -40,7 +43,7 @@ The repository uses [oh-my-pi](https://omp.sh) as an agent for issue/PR automati
 
 ### `omp.yml`
 
-Triggered by issue or PR review comments containing `/omp`. It installs OMP from source, authenticates against `ollama-cloud`, and runs the requested command.
+Triggered by issue or PR review comments containing `/omp`. It installs OMP from source, authenticates against `ollama-cloud`, and runs the requested command. The workflow also installs the `agynio/gh-pr-review` extension pinned to `v1.6.2` so inline review comments are available.
 
 Command routing:
 
@@ -55,7 +58,7 @@ Triggered by new/reopened issues and PR events (`opened`, `synchronize`, `ready_
 
 - **triage-issue** — classifies the issue, sets type/priority fields, applies labels, and dispatches `omp-fix-issue`.
 - **label-pr** — applies type and priority labels if not already present.
-- **review-pr** — reviews PRs, with special handling for dependency and bot-authored PRs. Skips re-review if the latest commit is from a known agent/bot.
+- **review-pr** — reviews PRs, with special handling for dependency and bot-authored PRs. Skips re-review if the latest commit is from a known agent/bot. The job pins the `agynio/gh-pr-review` extension to `v1.6.2` so inline review comments can be posted.
 
 When a pull request is `closed`, two extra jobs cancel any in-flight `label-pr` or `review-pr` runs for that PR by claiming their concurrency groups with `cancel-in-progress: true`.
 
@@ -98,7 +101,9 @@ The workflow uses the `mitchellh/vouch/action/manage-by-discussion` action.
 
 Scheduled daily at 08:00 UTC plus on `push` to `main` and manual dispatch. It installs `@chronova/wiki-agent`, runs `wiki --update` against `.wiki/`, and opens a wiki staging snapshot pull request when content changes exist. If the GitHub Wiki repository is already initialized, it also publishes the flattened wiki output directly to the wiki repo.
 
-## Agent rules
+## Agent tools and rules
+
+The `review-pr` prompt (`.omp/commands/review-pr.md`) instructs the agent to install `agynio/gh-pr-review` pinned to `v1.6.2` and to use `gh pr-review` subcommands (rather than `gh pr review`) for inline review comments.
 
 Additional constraints for OMP are stored in `.omp/rules/`:
 
