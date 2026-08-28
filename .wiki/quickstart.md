@@ -2,7 +2,9 @@
 type: guide
 title: Quickstart
 description: Install and configure the Chronova Pi plugin for oh-my-pi in a few steps.
-tags: [quickstart, installation, configuration]
+tags: [ quickstart, installation, configuration ]
+last_updated: 2026-08-28T01:50:06.878Z
+updated_by: wiki-agent
 ---
 
 # Quickstart
@@ -11,7 +13,7 @@ Get the plugin installed and sending heartbeats to your [Chronova](https://chron
 
 ## Prerequisites
 
-1. **oh-my-pi** (`pi-coding-agent` v18+; resolved to `18.0.6` in `package-lock.json`). The plugin is loaded by oh-my-pi through the `omp.extensions` field in `package.json` (see [package.json](../package.json)).
+1. **oh-my-pi** (`pi-coding-agent` v18+; resolved to `18.0.8` in `package-lock.json`). The plugin is loaded by oh-my-pi through the `omp.extensions` field in `package.json` (see [package.json](../package.json)).
 2. **Node.js** v22.12 or newer (`"node": ">=22.12"` in `package.json`).
 3. **`chronova-cli`** installed at `~/.local/bin/chronova-cli` and on your PATH. This is the CLI that actually forwards heartbeats to Chronova.
 4. A **Chronova account** with an API key configured in `~/.chronova.cfg` (the same config file used by `chronova-cli`).
