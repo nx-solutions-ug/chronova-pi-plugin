@@ -4,7 +4,7 @@ title: CI/CD
 description: GitHub Actions workflows that test, release, and run OMP agents for
   this repository.
 tags: [ ci, cd, github-actions, automation ]
-last_updated: 2026-08-28T09:54:13.159Z
+last_updated: 2026-08-30T11:58:23.702Z
 updated_by: wiki-agent
 ---
 
@@ -112,7 +112,20 @@ Additional constraints for OMP are stored in `.omp/rules/`:
 
 ## Agent configuration
 
-`.omp/agent/config.yml` pins model aliases used by the OMP workflows. For example, the default review/triage model is `ollama-cloud/minimax-m3`.
+`.omp/agent/config.yml` pins model aliases used by the OMP workflows:
+
+| Role | Model |
+| --- | --- |
+| `default` | `ollama-cloud/glm-5.3-flash` |
+| `task` | `ollama-cloud/glm-5.3-flash` |
+| `commit` | `ollama-cloud/glm-5.3-flash` |
+| `plan` | `ollama-cloud/kimi-k2.6` |
+| `designer` | `ollama-cloud/kimi-k2.6` |
+| `vision` | `ollama-cloud/qwen3.5:397b` |
+| `smol` | `ollama-cloud/devstral-2:123b` |
+| `slow` | `ollama-cloud/qwen3.5:397b` |
+
+The CI workflows (`omp.yml`, `omp-ci.yml`, `omp-fix-issue.yml`) run the default agent with `--model ollama-cloud/glm-5.3-flash`.
 
 ## Related pages
 
