@@ -3,7 +3,7 @@ type: guide
 title: Quickstart
 description: Install and configure the Chronova Pi plugin for oh-my-pi in a few steps.
 tags: [ quickstart, installation, configuration ]
-last_updated: 2026-08-30T00:39:43.872Z
+last_updated: "2026-08-30T11:09:51.186Z"
 updated_by: wiki-agent
 ---
 

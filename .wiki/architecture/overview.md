@@ -2,7 +2,9 @@
 type: architecture
 title: Architecture Overview
 description: How the Chronova Pi plugin hooks into oh-my-pi and flushes heartbeats.
-tags: [architecture, lifecycle, extension-api]
+tags: [ architecture, lifecycle, extension-api ]
+last_updated: "2026-08-30T11:10:28.622Z"
+updated_by: wiki-agent
 ---
 
 # Architecture overview

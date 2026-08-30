@@ -2,7 +2,9 @@
 type: operations
 title: Troubleshooting
 description: Debug logging, common issues, and how to verify heartbeat activity.
-tags: [troubleshooting, debug, logging, faq]
+tags: [ troubleshooting, debug, logging, faq ]
+last_updated: "2026-08-30T11:10:28.627Z"
+updated_by: wiki-agent
 ---
 
 # Troubleshooting

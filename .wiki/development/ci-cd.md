@@ -4,7 +4,7 @@ title: CI/CD
 description: GitHub Actions workflows that test, release, and run OMP agents for
   this repository.
 tags: [ ci, cd, github-actions, automation ]
-last_updated: 2026-08-28T09:54:13.159Z
+last_updated: "2026-08-30T11:10:01.325Z"
 updated_by: wiki-agent
 ---
 

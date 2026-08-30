@@ -2,7 +2,9 @@
 type: architecture
 title: Rate Limiting & State
 description: Per-project heartbeat rate limiting and persisted state.
-tags: [rate-limit, state, persistence]
+tags: [ rate-limit, state, persistence ]
+last_updated: "2026-08-30T11:10:28.626Z"
+updated_by: wiki-agent
 ---
 
 # Rate limiting & state

@@ -2,7 +2,9 @@
 type: architecture
 title: Event Tracking
 description: How the plugin translates oh-my-pi tool results into pending heartbeat changes.
-tags: [tracking, diff, ast-edit, read, write]
+tags: [ tracking, diff, ast-edit, read, write ]
+last_updated: "2026-08-30T11:10:28.624Z"
+updated_by: wiki-agent
 ---
 
 # Event tracking

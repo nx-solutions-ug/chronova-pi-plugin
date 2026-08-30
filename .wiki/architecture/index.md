@@ -2,7 +2,7 @@
 type: Documentation Index
 title: "Architecture"
 description: "Files and subdirectories in Architecture."
-last_updated: "2026-08-28T09:54:17.198Z"
+last_updated: "2026-08-30T11:09:51.188Z"
 updated_by: "wiki-agent"
 ---
 

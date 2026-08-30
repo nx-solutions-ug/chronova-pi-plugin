@@ -2,7 +2,9 @@
 type: architecture
 title: Heartbeat CLI Invocation
 description: How the plugin builds and runs the chronova-cli command.
-tags: [chronova-cli, heartbeat, spawn, cli]
+tags: [ chronova-cli, heartbeat, spawn, cli ]
+last_updated: "2026-08-30T11:10:28.626Z"
+updated_by: wiki-agent
 ---
 
 # Heartbeat CLI invocation
