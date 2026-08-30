@@ -4,7 +4,7 @@ title: CI/CD
 description: GitHub Actions workflows that test, release, and run OMP agents for
   this repository.
 tags: [ ci, cd, github-actions, automation ]
-last_updated: 2026-08-28T09:54:13.159Z
+last_updated: 2026-08-30T12:12:02.545Z
 updated_by: wiki-agent
 ---
 
@@ -41,9 +41,11 @@ The release job writes `CHANGELOG.md`, bumps `package.json`, publishes to npm, a
 
 The repository uses [oh-my-pi](https://omp.sh) as an agent for issue/PR automation. Agent prompts are stored in `.omp/commands/`.
 
-### `omp.yml`
+All four OMP workflows (`omp.yml`, `omp-ci.yml`, `omp-fix-issue.yml`) share the same setup: they install OMP via the native bash installer (`curl -fsSL https://omp.sh/install | sh`), then authenticate by inserting an `ollama-cloud` API key directly into OMP's SQLite database (`~/.omp/agent/agent.db`) and refreshing the model list. Every agent invocation passes `--model ollama-cloud/glm-5.3-flash` and streams output through `.omp/stream-log.py`.
 
-Triggered by issue or PR review comments containing `/omp`. It installs OMP from source, authenticates against `ollama-cloud`, and runs the requested command. The workflow also installs the `agynio/gh-pr-review` extension pinned to `v1.6.2` so inline review comments are available.
+All three OMP workflows (`omp.yml`, `omp-ci.yml`, `omp-fix-issue.yml`) share the same setup: they install OMP via the native bash installer (`curl -fsSL https://omp.sh/install | sh`), then authenticate by inserting an `ollama-cloud` API key directly into OMP's SQLite database (`~/.omp/agent/agent.db`) and refreshing the model list. Every agent invocation passes `--model ollama-cloud/glm-5.3-flash` and streams output through `.omp/stream-log.py`.
+
+Triggered by issue or PR review comments containing `/omp`. It installs OMP with the native bash installer (`curl -fsSL https://omp.sh/install | sh`), injects an `ollama-cloud` API key into OMP's SQLite credential store, and runs the requested command. The workflow also installs the `agynio/gh-pr-review` extension pinned to `v1.6.2` so inline review comments are available.
 
 Command routing:
 
@@ -99,7 +101,7 @@ The workflow uses the `mitchellh/vouch/action/manage-by-discussion` action.
 
 ### `update-wiki.yml`
 
-Scheduled daily at 08:00 UTC plus on `push` to `main` and manual dispatch. It installs `@chronova/wiki-agent`, runs `wiki --update` against `.wiki/`, and opens a wiki staging snapshot pull request when content changes exist. If the GitHub Wiki repository is already initialized, it also publishes the flattened wiki output directly to the wiki repo.
+Scheduled daily at 08:00 UTC plus on `push` to `main` and manual dispatch. It installs `@chronova/wiki-agent` globally with Bun, runs `wiki --update` against `.wiki/`, and opens a wiki staging snapshot pull request when content changes exist. If the GitHub Wiki repository is already initialized, it also publishes the flattened wiki output directly to the wiki repo. The wiki model defaults to `kimi-k3` via the `WIKI_MODEL` variable and can be overridden through the repository's `WIKI_MODEL` Actions variable.
 
 ## Agent tools and rules
 
@@ -112,7 +114,7 @@ Additional constraints for OMP are stored in `.omp/rules/`:
 
 ## Agent configuration
 
-`.omp/agent/config.yml` pins model aliases used by the OMP workflows. For example, the default review/triage model is `ollama-cloud/minimax-m3`.
+`.omp/agent/config.yml` pins model aliases per role. Review, triage, and other default/agent tasks use `ollama-cloud/glm-5.3-flash`; `plan` and `designer` roles use `ollama-cloud/kimi-k2.6`; `smol` uses `ollama-cloud/devstral-2:123b`; and `vision`/`slow` roles use `ollama-cloud/qwen3.5:397b`. The workflows pass `--model ollama-cloud/glm-5.3-flash` explicitly on every `omp` invocation.
 
 ## Related pages
 
