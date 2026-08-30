@@ -43,7 +43,7 @@ The repository uses [oh-my-pi](https://omp.sh) as an agent for issue/PR automati
 
 All four OMP workflows (`omp.yml`, `omp-ci.yml`, `omp-fix-issue.yml`) share the same setup: they install OMP via the native bash installer (`curl -fsSL https://omp.sh/install | sh`), then authenticate by inserting an `ollama-cloud` API key directly into OMP's SQLite database (`~/.omp/agent/agent.db`) and refreshing the model list. Every agent invocation passes `--model ollama-cloud/glm-5.3-flash` and streams output through `.omp/stream-log.py`.
 
-### `omp.yml`
+All three OMP workflows (`omp.yml`, `omp-ci.yml`, `omp-fix-issue.yml`) share the same setup: they install OMP via the native bash installer (`curl -fsSL https://omp.sh/install | sh`), then authenticate by inserting an `ollama-cloud` API key directly into OMP's SQLite database (`~/.omp/agent/agent.db`) and refreshing the model list. Every agent invocation passes `--model ollama-cloud/glm-5.3-flash` and streams output through `.omp/stream-log.py`.
 
 Triggered by issue or PR review comments containing `/omp`. It installs OMP with the native bash installer (`curl -fsSL https://omp.sh/install | sh`), injects an `ollama-cloud` API key into OMP's SQLite credential store, and runs the requested command. The workflow also installs the `agynio/gh-pr-review` extension pinned to `v1.6.2` so inline review comments are available.
 
