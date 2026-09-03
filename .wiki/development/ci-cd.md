@@ -4,7 +4,7 @@ title: CI/CD
 description: GitHub Actions workflows that test, release, and run OMP agents for
   this repository.
 tags: [ ci, cd, github-actions, automation ]
-last_updated: 2026-08-30T12:35:35.140Z
+last_updated: 2026-09-03T18:43:19.934Z
 updated_by: wiki-agent
 ---
 
@@ -63,6 +63,21 @@ Triggered by new/reopened issues and PR events (`opened`, `synchronize`, `ready_
 - **review-pr** — reviews PRs, with special handling for dependency and bot-authored PRs. Skips re-review if the latest commit is from a known agent/bot. The job pins the `agynio/gh-pr-review` extension to `v1.6.2` so inline review comments can be posted.
 
 When a pull request is `closed`, two extra jobs cancel any in-flight `label-pr` or `review-pr` runs for that PR by claiming their concurrency groups with `cancel-in-progress: true`.
+
+### `omp-code-review.yml`
+
+A dedicated review workflow, separate from `omp-ci.yml`'s `review-pr` job. It runs on:
+
+- `pull_request` events (`opened`, `synchronize`, `ready_for_review`, `review_requested`),
+- `pull_request_review` submissions and `pull_request_review_comment` creations, and
+- manual `workflow_dispatch` with a required `pr_number` input.
+
+It contains two jobs:
+
+- **dependency-review** — runs only for PRs authored by `renovate[bot]` or `dependabot[bot]`. It researches changelogs and assesses breaking changes via `.omp/commands/dependency-review.md`, then verifies that a review or comment was actually posted.
+- **code-review** — reviews human- and agent-authored PRs via `.omp/commands/review-pr.md`. It also runs when a review or review comment comes from a Jules agent (`google-labs-jules[bot]`), passing `IS_JULES`/`JULES_CONTEXT` into the prompt. On `synchronize` events it skips re-review if the latest commit was made by a known agent/bot (checked via the GitHub API). A verification step confirms an agent review or comment was posted, and deliberately skips that verification when the PR modifies `omp-code-review.yml` itself.
+
+Concurrency is grouped per PR (`omp-code-review-<PR number>`). `cancel-in-progress` is **conditional**: only `pull_request` and `workflow_dispatch` events supersede an in-flight run; `pull_request_review` and `pull_request_review_comment` runs queue behind it instead of cancelling. This guards against a cancel race where the agent posts a review (triggering a `pull_request_review`-event run) while the original `pull_request` run is still in flight — unconditional cancellation would kill the in-flight run while the replacement review-event run is skipped by job conditions (they are gated to Jules-authored activity), leaving the required `code-review` check wedged at `CANCELLED` and affected PRs permanently `UNSTABLE`.
 
 ### `omp-fix-issue.yml`
 
