@@ -4,7 +4,7 @@ title: CI/CD
 description: GitHub Actions workflows that test, release, and run OMP agents for
   this repository.
 tags: [ ci, cd, github-actions, automation ]
-last_updated: 2026-09-03T18:43:19.934Z
+last_updated: 2026-09-03T21:36:02.931Z
 updated_by: wiki-agent
 ---
 
@@ -28,7 +28,7 @@ Concurrency is grouped by `workflow-ref` and cancels in-progress runs.
 
 ### `release.yml`
 
-Runs on every push to `main`.
+Runs on every push to `main`. The workflow-level `permissions` block grants `contents: read` plus `id-token: write`; the latter lets the job mint a GitHub OIDC token, which npm trusted publishing uses to publish the package with Sigstore provenance attestations.
 
 1. **Test job** — runs `type-check` and `lint`.
 2. **Release job** — depends on the test job passing.
