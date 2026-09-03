@@ -4,7 +4,7 @@ title: CI/CD
 description: GitHub Actions workflows that test, release, and run OMP agents for
   this repository.
 tags: [ ci, cd, github-actions, automation ]
-last_updated: 2026-08-30T12:35:35.140Z
+last_updated: 2026-09-03T13:57:12.884Z
 updated_by: wiki-agent
 ---
 
@@ -41,7 +41,7 @@ The release job writes `CHANGELOG.md`, bumps `package.json`, publishes to npm, a
 
 The repository uses [oh-my-pi](https://omp.sh) as an agent for issue/PR automation. Agent prompts are stored in `.omp/commands/`.
 
-All three OMP workflows (`omp.yml`, `omp-ci.yml`, `omp-fix-issue.yml`) share the same setup: they install OMP via the native bash installer (`curl -fsSL https://omp.sh/install | sh`), then authenticate by inserting an `ollama-cloud` API key directly into OMP's SQLite database (`~/.omp/agent/agent.db`) and refreshing the model list. Every agent invocation passes `--model ollama-cloud/glm-5.3-flash` and streams output through `.omp/stream-log.py`.
+All four OMP workflows (`omp.yml`, `omp-ci.yml`, `omp-code-review.yml`, `omp-fix-issue.yml`) share the same setup: they install OMP via the native bash installer (`curl -fsSL https://omp.sh/install | sh`), then authenticate by inserting an `ollama-cloud` API key directly into OMP's SQLite database (`~/.omp/agent/agent.db`) and refreshing the model list. Every agent invocation passes `--model ollama-cloud/glm-5.3-flash:max` (the `glm-5.3-flash` model with its high-effort `:max` variant) and streams output through `.omp/stream-log.py`.
 
 ### `omp.yml`
 
@@ -56,13 +56,26 @@ The workflow reacts with an `eyes` emoji on the triggering comment before runnin
 
 ### `omp-ci.yml`
 
-Triggered by new/reopened issues and PR events (`opened`, `synchronize`, `ready_for_review`, `closed`). It contains three conditional jobs:
+Triggered by newly opened issues, PR events (`opened`, `ready_for_review`, `closed`), and manual dispatch. It contains three conditional jobs:
 
-- **triage-issue** — classifies the issue, sets type/priority fields, applies labels, and dispatches `omp-fix-issue`.
-- **label-pr** — applies type and priority labels if not already present.
-- **review-pr** — reviews PRs, with special handling for dependency and bot-authored PRs. Skips re-review if the latest commit is from a known agent/bot. The job pins the `agynio/gh-pr-review` extension to `v1.6.2` so inline review comments can be posted.
+- **triage-issue** — classifies the issue, sets type/priority fields, applies labels, and dispatches `omp-fix-issue` (via the `issue-triaged` repository dispatch event).
+- **label-pr** — applies type and priority labels if not already present. A skip check avoids rerunning the agent when both a type and a priority label already exist.
+- **cancel-label-on-close** — when a pull request is `closed`, this job cancels any in-flight `label-pr` run for that PR by claiming the shared `omp-label-<pr>` concurrency group with `cancel-in-progress: true`. Nothing to review runs here — code review lives in `omp-code-review.yml` (below).
 
-When a pull request is `closed`, two extra jobs cancel any in-flight `label-pr` or `review-pr` runs for that PR by claiming their concurrency groups with `cancel-in-progress: true`.
+### `omp-code-review.yml`
+
+Code review was split into this dedicated workflow (see commit message of the CI change that introduced it). Triggered by pull request events (`opened`, `synchronize`, `ready_for_review`, `review_requested`), `pull_request_review` submissions, `pull_request_review_comment` creation, and manually via `workflow_dispatch` (with an explicit PR number). Concurrency is grouped per PR with `cancel-in-progress: true`.
+
+Two jobs:
+
+- **dependency-review** — runs only for PRs opened by `renovate[bot]` or `dependabot[bot]`. Uses the `.omp/commands/dependency-review.md` prompt to review which packages were updated, old/new versions, and update type (patch/minor/major), researching changelogs and assessing breaking changes. After the agent runs, a verification step fails the job if no review or comment was posted by the agent.
+- **code-review** — runs for human- and agent-authored PRs, using `.omp/commands/review-pr.md`:
+  - On `synchronize` events it first inspects the head commit author/committer; if the commit is from a known agent or bot (`opencode-agent`, `opencode`, `github-actions`, `omp-agent`, `chronova-agent`), re-review is skipped. `review_requested` (an explicit human retrigger from the GitHub UI) is never skipped.
+  - It detects involvement of Google's Jules agent (Jules-authored PRs, "created automatically by Jules" body markers, Jules-submitted reviews, Jules review comments) and passes that context (`IS_JULES` / `JULES_CONTEXT`) to the review prompt.
+  - Checkout uses full history (`fetch-depth: 0`) so `git diff` against the base branch works for large PRs (avoids HTTP 406 on >300 files).
+  - A final verification step fails the job if neither a review nor any comment was posted and the PR has no existing review threads that would justify silence — preventing a silently failed review from being read as an approval. The check is skipped by design for PRs that modify `omp-code-review.yml` itself.
+
+Both jobs pin the `agynio/gh-pr-review` extension to `v1.6.2` so inline review comments can be posted, and react with an `eyes` emoji on the triggering PR before running the agent.
 
 ### `omp-fix-issue.yml`
 
@@ -114,7 +127,7 @@ Additional constraints for OMP are stored in `.omp/rules/`:
 
 ## Agent configuration
 
-`.omp/agent/config.yml` pins model aliases per role. Review, triage, and other default/agent tasks use `ollama-cloud/glm-5.3-flash`; `plan` and `designer` roles use `ollama-cloud/kimi-k2.6`; `smol` uses `ollama-cloud/devstral-2:123b`; and `vision`/`slow` roles use `ollama-cloud/qwen3.5:397b`. The workflows pass `--model ollama-cloud/glm-5.3-flash` explicitly on every `omp` invocation.
+`.omp/agent/config.yml` pins model aliases per role. Review, triage, and other default/agent tasks use `ollama-cloud/glm-5.3-flash`; `plan` and `designer` roles use `ollama-cloud/kimi-k2.6`; `smol` uses `ollama-cloud/devstral-2:123b`; and `vision`/`slow` roles use `ollama-cloud/qwen3.5:397b`. The workflows override the defaults by passing `--model ollama-cloud/glm-5.3-flash:max` explicitly on every `omp` invocation.
 
 ## Related pages
 
