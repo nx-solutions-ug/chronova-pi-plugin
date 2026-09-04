@@ -4,7 +4,7 @@ title: CI/CD
 description: GitHub Actions workflows that test, release, and run OMP agents for
   this repository.
 tags: [ ci, cd, github-actions, automation ]
-last_updated: 2026-09-03T18:43:19.934Z
+last_updated: 2026-09-04T18:42:11.888Z
 updated_by: wiki-agent
 ---
 
@@ -116,7 +116,7 @@ The workflow uses the `mitchellh/vouch/action/manage-by-discussion` action.
 
 ### `update-wiki.yml`
 
-Scheduled daily at 08:00 UTC plus on `push` to `main` and manual dispatch. It installs `@chronova/wiki-agent` globally with Bun, runs `wiki --update` against `.wiki/`, and opens a wiki staging snapshot pull request when content changes exist. If the GitHub Wiki repository is already initialized, it also publishes the flattened wiki output directly to the wiki repo. The wiki model defaults to `kimi-k3` via the `WIKI_MODEL` variable and can be overridden through the repository's `WIKI_MODEL` Actions variable.
+Scheduled daily at 08:00 UTC plus on `push` to `main` and manual dispatch. It installs `@chronova/wiki-agent` globally with Bun, runs `wiki --update` against `.wiki/`, and opens a wiki staging snapshot pull request when content changes exist. If the GitHub Wiki repository is already initialized, it also publishes the flattened wiki output directly to the wiki repo. The wiki model defaults to `glm-5.3-flash` and can be overridden through the repository's `WIKI_MODEL` Actions variable.
 
 ## Agent tools and rules
 
