@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.1...v1.7.2) (2026-09-04)
+
+
+### Bug Fixes
+
+* add @types/node devDependency for type-checking and add workflow_dispatch ([ffbd685](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/ffbd685aa501a19c0ed03cab4a3eba248b767751))
+
 ## [1.7.1](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.0...v1.7.1) (2026-07-28)
 
 
