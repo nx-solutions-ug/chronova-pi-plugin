@@ -1,3 +1,10 @@
+## [1.7.3](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.2...v1.7.3) (2026-09-05)
+
+
+### Bug Fixes
+
+* align heartbeat args and CLI discovery with chronova-antigravity-plugin ([5f5fccf](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/5f5fccf84d616177aef892671c82e3c8e8fbb56e))
+
 ## [1.7.2](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.1...v1.7.2) (2026-09-04)
 
 
