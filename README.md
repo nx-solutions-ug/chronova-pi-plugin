@@ -60,9 +60,8 @@ chronova-cli \
   --entity-type file \
   --project-folder <project-directory> \
   --plugin "oh-my-pi/<omp-version> chronova-pi-plugin/<plugin-version>" \
-  --category "ai coding" \
-  --write \                        # for write operations
-  --ai-line-changes <net-lines>    # additions - deletions
+  --category coding \
+  [--write]
 ```
 
 ## Project Structure
