@@ -2,7 +2,9 @@
 type: operations
 title: Troubleshooting
 description: Debug logging, common issues, and how to verify heartbeat activity.
-tags: [troubleshooting, debug, logging, faq]
+tags: [ troubleshooting, debug, logging, faq ]
+last_updated: 2026-09-07T17:07:38.008Z
+updated_by: wiki-agent
 ---
 
 # Troubleshooting
@@ -33,7 +35,7 @@ The log includes every heartbeat payload, argument list, `chronova-cli` output, 
 
 ## No heartbeats appearing in Chronova
 
-1. Confirm `chronova-cli` is installed at the expected path:
+1. Confirm `chronova-cli` is resolvable by the plugin (env override `CHRONOVA_CLI_PATH`, then `~/.local/bin/chronova-cli`, then `PATH`):
 
    ```bash
    ls -l ~/.local/bin/chronova-cli

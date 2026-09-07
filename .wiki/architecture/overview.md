@@ -2,7 +2,9 @@
 type: architecture
 title: Architecture Overview
 description: How the Chronova Pi plugin hooks into oh-my-pi and flushes heartbeats.
-tags: [architecture, lifecycle, extension-api]
+tags: [ architecture, lifecycle, extension-api ]
+last_updated: 2026-09-07T17:07:29.004Z
+updated_by: wiki-agent
 ---
 
 # Architecture overview
@@ -61,7 +63,7 @@ The plugin registers three event handlers:
 Rate-limiting happens in two places:
 
 - `src/state.ts` decides whether enough time has passed since the last heartbeat for a given project (60 seconds).
-- `tryFlush()` in `src/index.ts` only calls `flushPending()` when `shouldSendHeartbeat()` returns true. If rate-limited, changes stay in the pending map for the next opportunity. The rate-limit check is performed only here; `sendHeartbeat()` and `sendHeartbeatForce()` do not re-check it and update the last-heartbeat timestamp after spawning.
+- `tryFlush()` in `src/index.ts` only calls `flushPending()` when `shouldSendHeartbeat()` returns true. If rate-limited, changes stay in the pending map for the next opportunity. The rate-limit check is performed only here; `sendHeartbeat()` and `sendHeartbeatForce()` do not re-check it and update the last-heartbeat timestamp after spawning. Since `sendHeartbeatForce()` now delegates to `sendHeartbeat()`, forced flushes follow the same send path.
 
 ## Design principles
 
