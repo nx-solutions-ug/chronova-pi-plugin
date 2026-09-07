@@ -2,7 +2,9 @@
 type: architecture
 title: Rate Limiting & State
 description: Per-project heartbeat rate limiting and persisted state.
-tags: [rate-limit, state, persistence]
+tags: [ rate-limit, state, persistence ]
+last_updated: 2026-09-07T17:07:32.210Z
+updated_by: wiki-agent
 ---
 
 # Rate limiting & state
@@ -64,7 +66,7 @@ Because `shouldSendHeartbeat()` is checked only once per flush in `tryFlush()`, 
 
 ## Force flush
 
-`session_shutdown` bypasses the rate limit entirely. `tryFlush()` is not called; instead any pending changes are converted to payloads and sent with `sendHeartbeatForce()`, which updates the last-heartbeat timestamp after each spawn.
+`session_shutdown` bypasses the rate limit entirely. `tryFlush()` is not called; instead any pending changes are converted to payloads and sent with `sendHeartbeatForce()`. That function delegates to `sendHeartbeat()` (it only logs an extra "forced" debug line), and `sendHeartbeat()` still updates the last-heartbeat timestamp after each spawn — so a shutdown flush also starts a fresh 60-second rate-limit window for the project.
 
 ## Related pages
 

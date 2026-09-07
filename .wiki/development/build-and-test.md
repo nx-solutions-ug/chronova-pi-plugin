@@ -3,7 +3,7 @@ type: development
 title: Build & Test
 description: Local development, build, lint, type-check, and release for the plugin.
 tags: [ build, lint, test, release, typescript ]
-last_updated: 2026-09-03T19:59:38.657Z
+last_updated: 2026-09-07T17:07:49.148Z
 updated_by: wiki-agent
 ---
 
@@ -18,7 +18,7 @@ Defined in `package.json`:
 | Script | Command | Purpose |
 | --- | --- | --- |
 | `build` | `tsc` | Compile `src/` to `dist/` using `tsconfig.json`. |
-| `prepublishOnly` | `npm run build` | Build before publishing to npm. |
+| `prepublishOnly` | `npm run build` | Build before publishing to npm (run by `semantic-release`'s npm publish step). |
 | `type-check` | `tsc --noEmit` | Validate types without emitting files. |
 | `lint` | `eslint .` | Run ESLint over the project (see [Lint rules](#lint-rules)). |
 
@@ -114,7 +114,7 @@ Releases are automated with [semantic-release](https://semantic-release.gitbook.
 
 ## Tooling versions
 
-The project pins TypeScript tooling via `package.json` `devDependencies`. ESLint is configured through `eslint.config.js` using `@eslint/js` and `typescript-eslint`; Renovate handles patch/minor dependency bumps automatically. `package.json` currently declares `@oh-my-pi/pi-coding-agent` at `^18.0.0` (resolved to `18.1.6` in `package-lock.json`); verify `package-lock.json` for the exact resolved versions of all pinned dependencies.
+The project pins TypeScript tooling via `package.json` `devDependencies`. ESLint is configured through `eslint.config.js` using `@eslint/js` and `typescript-eslint`; Renovate handles patch/minor dependency bumps automatically. `package.json` currently declares `@oh-my-pi/pi-coding-agent` at `^18.0.0` (resolved to `18.1.13` in `package-lock.json`); verify `package-lock.json` for the exact resolved versions of all pinned dependencies.
 
 ## Related pages
 

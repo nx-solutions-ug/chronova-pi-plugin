@@ -2,7 +2,9 @@
 type: architecture
 title: Heartbeat CLI Invocation
 description: How the plugin builds and runs the chronova-cli command.
-tags: [chronova-cli, heartbeat, spawn, cli]
+tags: [ chronova-cli, heartbeat, spawn, cli ]
+last_updated: 2026-09-07T17:07:25.422Z
+updated_by: wiki-agent
 ---
 
 # Heartbeat CLI invocation
@@ -11,16 +13,27 @@ tags: [chronova-cli, heartbeat, spawn, cli]
 
 ## CLI path
 
-The plugin looks for the binary at a fixed path:
+`getCliPath()` resolves the binary in this order:
+
+1. `CHRONOVA_CLI_PATH` environment variable, if set — used as-is.
+2. `~/.local/bin/chronova-cli`, if that file exists.
+3. Otherwise the bare name `chronova-cli`, which the OS resolves via `PATH`.
 
 ```typescript
-const CLI_PATH = path.join(
-  process.env.HOME ?? "/home/dev",
-  ".local/bin/chronova-cli"
-);
+const DEFAULT_CLI_PATH = path.join(os.homedir(), ".local", "bin", "chronova-cli");
+
+export function getCliPath(): string {
+  if (process.env.CHRONOVA_CLI_PATH) {
+    return process.env.CHRONOVA_CLI_PATH;
+  }
+  if (existsSync(DEFAULT_CLI_PATH)) {
+    return DEFAULT_CLI_PATH;
+  }
+  return "chronova-cli";
+}
 ```
 
-Make sure `chronova-cli` is installed there and executable. The plugin does not search PATH, and `~/.local/bin` does not need to be on the host PATH for the spawn to succeed.
+Installing the CLI at `~/.local/bin/chronova-cli` is still the recommended setup; a PATH installation or a `CHRONOVA_CLI_PATH` override also works.
 
 ## Payload shape
 
@@ -57,21 +70,22 @@ The server distinguishes AI coding activity from manual activity by checking whe
 
 `sendHeartbeat()`:
 
-1. Builds arguments.
-2. Spawns `chronova-cli` with `execFile()`.
-3. Calls `child.unref()` so the agent loop is not blocked waiting for the child.
-4. Updates the last-heartbeat timestamp after spawning.
+1. Resolves the CLI path via `getCliPath()`.
+2. Builds arguments with `buildHeartbeatArgs()`.
+3. Spawns the CLI with `execFile()`; output/errors are handled in a callback.
+4. Calls `child.unref()` so the agent loop is not blocked waiting for the child.
+5. Updates the last-heartbeat timestamp after spawning.
 
-`sendHeartbeatForce()` is used during `session_shutdown` to flush any remaining pending changes. It is otherwise identical to `sendHeartbeat()` except that it does not log `stdout`. Both functions update the last-heartbeat state after spawning. The rate-limit decision is made by `tryFlush()` in `src/index.ts`; `sendHeartbeat()` and `sendHeartbeatForce()` do not re-check it.
+`sendHeartbeatForce()` is used during `session_shutdown` to flush any remaining pending changes. It is a thin wrapper: it logs a forced-spawn debug line and delegates to `sendHeartbeat()`, so behavior, logging, and timestamp updates are identical. The rate-limit decision is made by `tryFlush()` in `src/index.ts`; neither send function re-checks it.
 
 ## Logging
 
 The plugin logs:
 
-- The full argument list at `DEBUG` level before spawning.
-- `stdout` at `DEBUG` (`sendHeartbeat()` only; forced flushes do not log stdout).
+- The resolved CLI path and full argument list at `DEBUG` level before spawning.
+- `stdout` at `DEBUG` for both normal and forced flushes (same code path).
 - `stderr` at `WARN`.
-- Spawn errors at `ERROR`.
+- Spawn errors at `ERROR` via the `execFile` callback; spawn failures (e.g. binary missing) at `ERROR` before the callback fires.
 
 Failures are swallowed; they do not propagate back to oh-my-pi.
 
