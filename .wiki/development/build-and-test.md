@@ -3,7 +3,7 @@ type: development
 title: Build & Test
 description: Local development, build, lint, type-check, and release for the plugin.
 tags: [ build, lint, test, release, typescript ]
-last_updated: 2026-09-09T02:15:09.707Z
+last_updated: 2026-09-10T02:12:45.174Z
 updated_by: wiki-agent
 ---
 
@@ -114,7 +114,7 @@ Releases are automated with [semantic-release](https://semantic-release.gitbook.
 
 ## Tooling versions
 
-The project pins TypeScript tooling via `package.json` `devDependencies`. ESLint is configured through `eslint.config.js` using `@eslint/js` and `typescript-eslint`; Renovate handles patch/minor dependency bumps automatically. `package.json` currently declares `@oh-my-pi/pi-coding-agent` at `^18.0.0` and `typescript-eslint` at `^8.61.1` (resolved to `18.1.14` and `8.70.0` respectively in `package-lock.json`); verify `package-lock.json` for the exact resolved versions of all pinned dependencies.
+The project pins TypeScript tooling via `package.json` `devDependencies`. ESLint is configured through `eslint.config.js` using `@eslint/js` and `typescript-eslint`; Renovate handles patch/minor dependency bumps automatically. `package.json` currently declares `@oh-my-pi/pi-coding-agent` at `^18.0.0` and `typescript-eslint` at `^8.61.1` (resolved to `18.1.15` and `8.70.0` respectively in `package-lock.json`); verify `package-lock.json` for the exact resolved versions of all pinned dependencies.
 
 ## Related pages
 
