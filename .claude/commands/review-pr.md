@@ -34,11 +34,13 @@ echo "JULES_CONTEXT=${JULES_CONTEXT:-}"
 ```
 
 The workflow sets `IS_JULES=true` when Jules (`google-labs-jules[bot]`) is involved. The `JULES_CONTEXT` value indicates the trigger:
+
 - `jules-authored-pr`: Jules created this PR (either as author or on behalf of a human) — review it and address Jules directly
 - `jules-review-submitted`: Jules posted a review — read Jules' review and respond
 - `jules-review-comment`: Jules posted a review comment/suggestion — address the specific suggestion
 
 After reading the PR in Step 1, also verify Jules involvement from the PR data:
+
 - PR author login contains `jules`
 - PR body contains `created automatically by Jules`
 - Any comment author login contains `jules`
@@ -85,7 +87,7 @@ Developers or PR authors often reply explaining intentional design decisions, ar
    - Inspect comments from PR authors, human reviewers, or peer agents in `thread_comments[]`.
    - Extract technical claims, rationale, or domain context provided in comments.
 2. **Ground and verify claims against project standards & codebase**:
-   - Query `AGENTS.md`, `.wiki/`, and surrounding code to verify whether the developer's claim conforms to documented project standards or intentional architecture.
+   - Query `AGENTS.md` and surrounding code to verify whether the developer's claim conforms to documented project standards or intentional architecture.
 3. **Assess the impact of developer justifications**:
    - **Sound & Justified Claims**: If the explanation provides a sound, technically valid justification (e.g. deliberate design override, documented exception, intentional API contract):
      - **Accept the justification**: Do NOT treat this pattern as a violation or re-raise it.
@@ -99,6 +101,7 @@ Developers or PR authors often reply explaining intentional design decisions, ar
 ## Step 3: Auto-Resolve Fixed or Justified Issues
 
 For each unresolved review thread (comments with `is_resolved: false`):
+
 1. **Resolved by code change**: Code was modified, removed, or refactored so the reported issue no longer exists, OR the comment has `is_outdated: true`.
 2. **Resolved by valid justification**: The author or reviewer provided a sound, validated explanation in thread comments (evaluated in Step 2) demonstrating that the implementation is intentional and correct.
 
@@ -140,25 +143,28 @@ git diff "$BASE"...HEAD -- .github/workflows/
 
 ### Review Criteria (chronova-pi-plugin)
 
-Check for ALL of the following (backed by `AGENTS.md` and `.wiki/`):
+Check for ALL of the following (backed by `AGENTS.md`):
+
 - **Type Safety**: TypeScript `strict: true` compliance. NEVER allow `as any` (SG rule `no-as-any`). NEVER allow `@ts-ignore` or `@ts-expect-error` (SG rule `no-ts-ignore`).
 - **ESM Only**: The package is `"type": "module"` targeting ES2022 with bundler module resolution — imports/exports only, no CommonJS (`require`/`module.exports`), no `__dirname`.
-- **Non-blocking Design**: Every `chronova-cli` spawn MUST be fire-and-forget (`child.unref()`). Heartbeats never block or await inside the agent loop (`.wiki/architecture/overview.md`).
+- **Non-blocking Design**: Every `chronova-cli` spawn MUST be fire-and-forget (`child.unref()`). Heartbeats never block or await inside the agent loop.
 - **Best-effort Error Handling**: Failures are logged via `src/logger.ts` and never thrown back into oh-my-pi — no unhandled rejections from extension event handlers. Empty catch blocks are still prohibited; log the failure.
 - **Rate Limiting Ownership**: Rate-limit decisions live ONLY in `src/state.ts` and the `tryFlush()` gate in `src/index.ts`. `sendHeartbeat()`/`sendHeartbeatForce()` do not re-check it. Do not add rate-limit checks elsewhere.
 - **Aggregation & Minimal Payload**: Multiple edits within a window merge into one heartbeat per file; only absolute file path, project folder, and write flag are forwarded. Do not widen the payload.
 - **Compiled Output**: `dist/` is generated from `src/` by `tsc` — never hand-edit or review `dist/` artifacts in a diff.
-- **Code Quality**: No dead code, unused variables, or unreachable code; `@typescript-eslint/no-unused-vars` treats `_`-prefixed names as exempt.
+- **Code Quality**: No dead code, unused variables, or unreachable code; oxlint's `no-unused-vars` treats `_`-prefixed names as exempt (`.oxlintrc.json`).
 - **Node/Tooling**: Code must run on Node `>=22.12`; dependency changes should follow `renovate.json` grouping.
 
 **What to Avoid**:
+
 - Do NOT comment on pre-existing code outside of this PR's diff.
-- Do NOT comment on formatting that ESLint (`eslint.config.js`) handles.
+- Do NOT comment on formatting that oxfmt (`.oxfmtrc.json`) handles.
 - This repo has no test framework configured — do not request new test files; instead verify changed logic by reading the implementation paths.
 
 ## Step 5: Deduplicate Findings
 
 For each finding identified in Step 4, check UNRESOLVED threads for semantic matches:
+
 - Same file + same issue type within nearby lines (allow ±5 line shift) = DUPLICATE (skip)
 - Already discussed and pending resolution in an active thread = DUPLICATE (skip)
 - Same file + different function/root cause = NEW (include)
@@ -168,6 +174,7 @@ Categorize into **new_issues** and **old_issues**.
 ## Step 6: Mapping Findings to Diff Lines
 
 GitHub inline review comments MUST reference a line that exists in the PR diff:
+
 - **Added/context lines** (RIGHT side): `--side RIGHT`, count line numbers from `+NEW_START` in the diff hunk header.
 - **Removed lines** (LEFT side): `--side LEFT`, count line numbers from `-OLD_START` in the diff hunk header.
 - Findings that do not map to a specific diff line belongs in the review `--body` summary, not inline.
@@ -175,6 +182,7 @@ GitHub inline review comments MUST reference a line that exists in the PR diff:
 ## Step 7: Post Review
 
 **Decision logic:**
+
 1. `new_issues` has items -> Submit review with `event=REQUEST_CHANGES` and all inline comments.
 2. `new_issues` empty + unresolved threads == 0 (all issues either fixed, justified & resolved, or clean) -> Submit review with `event=APPROVE` (no comments).
 3. `new_issues` empty + unresolved threads > 0 (genuine issues still legitimately outstanding without sound justification) -> **Do NOT submit a review** (existing inline comments remain visible).
@@ -212,8 +220,9 @@ Summary of findings..."
 ```
 
 Comment body conventions:
+
 - Start each inline body with severity tag: `[P0]` critical/security, `[P1]` high-impact bug, `[P2]` defect/convention violation, `[P3]` nit.
-- **Include a `suggestion` block whenever proposing a concrete code fix.** GitHub renders `` ```suggestion `` fenced blocks inside inline review comments as apply-able "Commit suggestion" buttons.
+- **Include a `suggestion` block whenever proposing a concrete code fix.** GitHub renders ` ```suggestion ` fenced blocks inside inline review comments as apply-able "Commit suggestion" buttons.
 - The suggestion block content MUST be valid replacement code without diff markers (`+`/`-`).
 
 ### For APPROVE (clean PR, single atomic call):
@@ -228,6 +237,7 @@ gh api \
 ```
 
 ### When Jules is involved (`IS_JULES=true`):
+
 The review body MUST start with `@jules` on the first line so Jules detects and acts on the review:
 
 ```markdown
@@ -245,6 +255,7 @@ Reviewed PR #$ARGUMENTS: <APPROVE / REQUEST_CHANGES / COMMENT> — <one-line sum
 ```
 
 ## Rules
+
 - Do NOT push commits or modify repository files.
 - Do NOT apply labels or merge the PR.
 - Always read diff locally against `origin/${BASE_REF:-main}`, never via `gh pr diff`.

@@ -31,9 +31,10 @@ function write(level: LogLevel, msg: string, data?: unknown): void {
   try {
     fs.mkdirSync(LOG_DIR, { recursive: true });
     const ts = new Date().toISOString();
-    const line = data !== undefined
-      ? `[${ts}] [${level}] ${msg} ${JSON.stringify(data)}\n`
-      : `[${ts}] [${level}] ${msg}\n`;
+    const line =
+      data !== undefined
+        ? `[${ts}] [${level}] ${msg} ${JSON.stringify(data)}\n`
+        : `[${ts}] [${level}] ${msg}\n`;
     fs.appendFileSync(LOG_FILE, line);
   } catch {
     // Swallow log write failures — never crash the extension
@@ -41,8 +42,16 @@ function write(level: LogLevel, msg: string, data?: unknown): void {
 }
 
 export const logger = {
-  debug(msg: string, data?: unknown): void { write("DEBUG", msg, data); },
-  info(msg: string, data?: unknown): void { write("INFO", msg, data); },
-  warn(msg: string, data?: unknown): void { write("WARN", msg, data); },
-  error(msg: string, data?: unknown): void { write("ERROR", msg, data); },
+  debug(msg: string, data?: unknown): void {
+    write("DEBUG", msg, data);
+  },
+  info(msg: string, data?: unknown): void {
+    write("INFO", msg, data);
+  },
+  warn(msg: string, data?: unknown): void {
+    write("WARN", msg, data);
+  },
+  error(msg: string, data?: unknown): void {
+    write("ERROR", msg, data);
+  },
 } as const;

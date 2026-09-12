@@ -66,7 +66,9 @@ export function trackEdit(details: {
       if (result.isError) continue;
       const absPath = resolveAbs(result.path);
       if (!absPath) continue;
-      const lineChanges = result.diff ? countLineChanges(result.diff) : { additions: 0, deletions: 0 };
+      const lineChanges = result.diff
+        ? countLineChanges(result.diff)
+        : { additions: 0, deletions: 0 };
       mergeChange(absPath, { ...lineChanges, isWrite: true });
       logger.debug("Tracked edit (perFile)", { path: absPath, ...lineChanges });
     }
@@ -78,7 +80,7 @@ export function trackEdit(details: {
     for (const filePath of details.files) {
       const absPath = resolveAbs(filePath);
       if (!absPath) continue;
-      const count = details.fileReplacements?.find(r => r.path === filePath)?.count ?? 1;
+      const count = details.fileReplacements?.find((r) => r.path === filePath)?.count ?? 1;
       mergeChange(absPath, { additions: count, deletions: 0, isWrite: true });
       logger.debug("Tracked ast_edit", { path: absPath, count });
     }
@@ -95,7 +97,9 @@ export function trackEdit(details: {
   const absPath = resolveAbs(filePath);
   if (!absPath) return;
 
-  const lineChanges = details.diff ? countLineChanges(details.diff) : { additions: 1, deletions: 0 };
+  const lineChanges = details.diff
+    ? countLineChanges(details.diff)
+    : { additions: 1, deletions: 0 };
   mergeChange(absPath, { ...lineChanges, isWrite: true });
   logger.debug("Tracked edit (single)", { path: absPath, ...lineChanges });
 }

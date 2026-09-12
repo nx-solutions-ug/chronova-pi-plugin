@@ -24,9 +24,9 @@ export function getCliPath(): string {
  */
 export function readPluginVersion(): string {
   try {
-    const pkg = JSON.parse(
-      readFileSync(new URL("../package.json", import.meta.url), "utf8"),
-    ) as { version?: unknown };
+    const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as {
+      version?: unknown;
+    };
     return typeof pkg.version === "string" ? pkg.version : "0.0.0";
   } catch {
     return "0.0.0";
@@ -50,11 +50,16 @@ export interface HeartbeatPayload {
  */
 export function buildHeartbeatArgs(payload: HeartbeatPayload): string[] {
   const args: string[] = [
-    "--entity", payload.entity,
-    "--entity-type", "file",
-    "--project-folder", payload.projectFolder,
-    "--plugin", PLUGIN_ARG,
-    "--category", "coding",
+    "--entity",
+    payload.entity,
+    "--entity-type",
+    "file",
+    "--project-folder",
+    payload.projectFolder,
+    "--plugin",
+    PLUGIN_ARG,
+    "--category",
+    "coding",
   ];
 
   if (payload.isWrite) {

@@ -1,7 +1,14 @@
 import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
 import { logger } from "./logger.js";
 import { sendHeartbeat, sendHeartbeatForce } from "./heartbeat.js";
-import { trackRead, trackWrite, trackEdit, flushPending, pendingCount, resolvePath } from "./tracker.js";
+import {
+  trackRead,
+  trackWrite,
+  trackEdit,
+  flushPending,
+  pendingCount,
+  resolvePath,
+} from "./tracker.js";
 import { shouldSendHeartbeat } from "./state.js";
 
 export default function chronovaPiPlugin(pi: ExtensionAPI): void {
@@ -37,10 +44,12 @@ export default function chronovaPiPlugin(pi: ExtensionAPI): void {
         if (details) {
           const resolvedDetails = {
             ...details,
-            path: details.path ? resolvePath(projectFolder, details.path) ?? undefined : undefined,
+            path: details.path
+              ? (resolvePath(projectFolder, details.path) ?? undefined)
+              : undefined,
             perFileResults: details.perFileResults
-              ?.map(r => ({ ...r, path: resolvePath(projectFolder, r.path) ?? undefined }))
-              .filter(r => r.path !== undefined),
+              ?.map((r) => ({ ...r, path: resolvePath(projectFolder, r.path) ?? undefined }))
+              .filter((r) => r.path !== undefined),
           };
           trackEdit(resolvedDetails);
           tryFlush();
@@ -63,11 +72,11 @@ export default function chronovaPiPlugin(pi: ExtensionAPI): void {
         if (details) {
           trackEdit({
             files: details.files
-              ?.map(f => resolvePath(projectFolder, f))
+              ?.map((f) => resolvePath(projectFolder, f))
               .filter((f): f is string => f !== null),
             fileReplacements: details.fileReplacements
-              ?.map(r => ({ ...r, path: resolvePath(projectFolder, r.path) ?? undefined }))
-              .filter(r => r.path !== undefined),
+              ?.map((r) => ({ ...r, path: resolvePath(projectFolder, r.path) ?? undefined }))
+              .filter((r) => r.path !== undefined),
           });
           tryFlush();
         }

@@ -25,15 +25,17 @@ gh pr view $ARGUMENTS --json title,body,author,headRefOid --jq '{title: .title, 
 ```
 
 Run `gh pr diff $ARGUMENTS` to determine:
+
 - Which packages were updated
 - Old and new versions
 - The update type (patch / minor / major)
 
-Focus on `package.json`, `package-lock.json`, and GitHub Actions workflow files (`.github/workflows/*.yml`).
+Focus on `package.json`, `bun.lock`, and GitHub Actions workflow files (`.github/workflows/*.yml`).
 
 ## Step 2: Research Release Notes
 
 For EACH updated dependency, find the actual changelog or release notes:
+
 - **npm packages**: Check GitHub releases via `gh api /repos/{owner}/{repo}/releases` or inspect `CHANGELOG.md`.
 - **GitHub Actions**: Check the action repository's releases via `gh api /repos/{owner}/{repo}/releases`.
 
@@ -46,14 +48,15 @@ This is a **TypeScript ESM npm package** (`@chronova/pi-plugin`) that is an exte
 - **Runtime**: Node.js ≥ 22.12, TypeScript (strict ESM, `"type": "module"`), compiled via `tsc` to `dist/`
 - **Source layout**: `src/index.ts` (extension factory), `src/heartbeat.ts`, `src/tracker.ts`, `src/state.ts`, `src/logger.ts`
 - **Core peer dep**: `@oh-my-pi/pi-coding-agent` — check any breaking API changes in the `ExtensionAPI` interface, event names (`session_start`, `tool_result`, `session_shutdown`), or plugin registration signature
-- **Dev tooling**: `eslint` (v10+), `typescript-eslint`, `semantic-release`
+- **Dev tooling**: `oxlint`, `oxfmt`, `semantic-release`
 - **No runtime deps** beyond `@oh-my-pi/pi-coding-agent`; the plugin invokes `chronova-cli` as an external process via `execFile`
 
 Assess:
+
 - Check whether the plugin's TypeScript source still compiles correctly after the update (`tsc --noEmit` conceptually, checking breaking API changes).
 - Check if any `@oh-my-pi/pi-coding-agent` major update changes the `ExtensionAPI` interface, event types, or plugin factory signature in ways used in `src/`.
 - Check for peer dependency version constraint changes in `package.json`.
-- For ESLint/TypeScript updates: check if new rules conflict with the current `eslint.config.js` or `tsconfig.json`.
+- For oxlint/oxfmt/TypeScript updates: check if new rules conflict with the current `.oxlintrc.json`, `.oxfmtrc.json`, or `tsconfig.json`.
 
 ## Step 4: Check for Renovate Dashboard
 
@@ -74,11 +77,13 @@ Submit a GitHub review via the pulls API:
 ## Dependency Update Summary
 
 ### Changes
-| Package | From | To | Type |
-|---------|------|----|------|
+
+| Package        | From          | To            | Type                |
+| -------------- | ------------- | ------------- | ------------------- |
 | [package-name] | [old-version] | [new-version] | [patch/minor/major] |
 
 ### Release Highlights
+
 - **Security fixes**: CVEs or security patches (if any)
 - **Bug fixes**: Notable fixes relevant to our usage
 - **Breaking changes**: Anything that could affect the plugin (especially `@oh-my-pi/pi-coding-agent` API changes)
@@ -86,16 +91,19 @@ Submit a GitHub review via the pulls API:
 - **New features**: Anything we might want to leverage
 
 ### Impact Assessment
+
 - [ ] No breaking changes detected
 - [ ] Version constraints in `package.json` are compatible
 - [ ] `@oh-my-pi/pi-coding-agent` API surface used in `src/` is unaffected
-- [ ] TypeScript/ESLint tooling changes are non-breaking
+- [ ] TypeScript/oxlint/oxfmt tooling changes are non-breaking
 
 ### Recommendation
+
 [SAFE TO MERGE / REVIEW RECOMMENDED / ACTION REQUIRED] with reasoning
 ```
 
 Submit using the GitHub API:
+
 - For safe patches and minor updates with no breaking changes:
   ```bash
   HEAD_SHA=$(gh pr view $ARGUMENTS --json headRefOid --jq .headRefOid)
@@ -120,6 +128,7 @@ Submit using the GitHub API:
   ```
 
 ## Rules
+
 - Do NOT push commits or modify repository files.
 - Do NOT merge the PR.
 - Always use $REPO_SLUG for API calls.

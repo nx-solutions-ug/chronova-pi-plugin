@@ -1,54 +1,48 @@
 {
   "name": "@chronova/pi-plugin",
   "version": "1.7.5",
+  "private": false,
   "description": "Chronova heartbeat tracking extension for oh-my-pi — sends coding activity to your Chronova dashboard via chronova-cli",
-  "type": "module",
-  "main": "dist/index.js",
+  "keywords": [
+    "ai-coding",
+    "chronova",
+    "coding-analytics",
+    "developer-analytics",
+    "heartbeat",
+    "oh-my-pi",
+    "omp",
+    "pi-plugin",
+    "wakatime"
+  ],
+  "homepage": "https://github.com/nx-solutions-ug/chronova-pi-plugin#readme",
+  "bugs": {
+    "url": "https://github.com/nx-solutions-ug/chronova-pi-plugin/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nx-solutions-ug/chronova-pi-plugin.git"
+  },
   "files": [
     "dist",
     "README.md",
     "LICENSE"
   ],
-  "engines": {
-    "node": ">=22.12"
-  },
-  "private": false,
-  "omp": {
-    "extensions": [
-      "./dist/index.js"
-    ]
-  },
-  "scripts": {
-    "build": "tsc",
-    "prepublishOnly": "npm run build",
-    "type-check": "tsc --noEmit",
-    "lint": "eslint ."
-  },
+  "type": "module",
+  "main": "dist/index.js",
   "publishConfig": {
     "access": "public"
   },
-  "keywords": [
-    "chronova",
-    "oh-my-pi",
-    "omp",
-    "pi-plugin",
-    "wakatime",
-    "heartbeat",
-    "coding-analytics",
-    "developer-analytics",
-    "ai-coding"
-  ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/nx-solutions-ug/chronova-pi-plugin.git"
-  },
-  "homepage": "https://github.com/nx-solutions-ug/chronova-pi-plugin#readme",
-  "bugs": {
-    "url": "https://github.com/nx-solutions-ug/chronova-pi-plugin/issues"
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target node --format esm --packages external",
+    "type-check": "tsc --noEmit",
+    "lint": "oxlint --react-plugin --vitest-plugin --import-plugin",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "semantic-release": "semantic-release",
+    "prepublishOnly": "bun run type-check && bun run build"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.0",
     "@oh-my-pi/pi-coding-agent": "^18.0.0",
     "@semantic-release/changelog": "^7.0.0",
     "@semantic-release/commit-analyzer": "^13.0.1",
@@ -57,9 +51,17 @@
     "@semantic-release/npm": "^13.0.0",
     "@semantic-release/release-notes-generator": "^14.0.3",
     "@types/node": "^26.4.1",
-    "eslint": "^10.0.0",
+    "oxfmt": "^0.67.0",
+    "oxlint": "^1.82.0",
     "semantic-release": "^25.0.0",
-    "typescript": "^6.0.0",
-    "typescript-eslint": "^8.61.1"
+    "typescript": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "omp": {
+    "extensions": [
+      "./dist/index.js"
+    ]
   }
 }
