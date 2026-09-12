@@ -1,3 +1,10 @@
+## [1.7.5](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.4...v1.7.5) (2026-09-12)
+
+
+### Bug Fixes
+
+* **ci:** quote command descriptions containing a colon ([eeb18d1](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/eeb18d1799c34c65d9e1aae60c904fb378d20523))
+
 ## [1.7.4](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.3...v1.7.4) (2026-09-12)
 
 
