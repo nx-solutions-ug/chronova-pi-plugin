@@ -42,7 +42,7 @@
     "semantic-release": "semantic-release",
     "prepublishOnly": "bun run type-check && bun run build",
     "lint:fix": "oxlint --react-plugin --vitest-plugin --import-plugin --fix",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "devDependencies": {
     "@oh-my-pi/pi-coding-agent": "^18.0.0",
