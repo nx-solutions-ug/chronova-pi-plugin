@@ -1,3 +1,10 @@
+## [1.7.7](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.6...v1.7.7) (2026-09-12)
+
+
+### Bug Fixes
+
+* do not fail pack/publish when husky is unavailable ([e1f5934](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/e1f59343ab8aac3f9ba3f17ca1454fe1195a480e))
+
 ## [1.7.6](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.5...v1.7.6) (2026-09-12)
 
 
