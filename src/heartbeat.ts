@@ -1,12 +1,12 @@
-import { execFile } from "node:child_process";
-import { readFileSync, existsSync } from "node:fs";
-import * as path from "node:path";
-import * as os from "node:os";
-import { VERSION as OMP_VERSION } from "@oh-my-pi/pi-coding-agent";
-import { logger } from "./logger.js";
-import { updateLastHeartbeat } from "./state.js";
+import { execFile } from 'node:child_process';
+import { readFileSync, existsSync } from 'node:fs';
+import * as path from 'node:path';
+import * as os from 'node:os';
+import { VERSION as OMP_VERSION } from '@oh-my-pi/pi-coding-agent';
+import { logger } from './logger.js';
+import { updateLastHeartbeat } from './state.js';
 
-const DEFAULT_CLI_PATH = path.join(os.homedir(), ".local", "bin", "chronova-cli");
+const DEFAULT_CLI_PATH = path.join(os.homedir(), '.local', 'bin', 'chronova-cli');
 
 export function getCliPath(): string {
   if (process.env.CHRONOVA_CLI_PATH) {
@@ -15,7 +15,7 @@ export function getCliPath(): string {
   if (existsSync(DEFAULT_CLI_PATH)) {
     return DEFAULT_CLI_PATH;
   }
-  return "chronova-cli";
+  return 'chronova-cli';
 }
 
 /**
@@ -24,12 +24,12 @@ export function getCliPath(): string {
  */
 export function readPluginVersion(): string {
   try {
-    const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as {
+    const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as {
       version?: unknown;
     };
-    return typeof pkg.version === "string" ? pkg.version : "0.0.0";
+    return typeof pkg.version === 'string' ? pkg.version : '0.0.0';
   } catch {
-    return "0.0.0";
+    return '0.0.0';
   }
 }
 
@@ -50,20 +50,20 @@ export interface HeartbeatPayload {
  */
 export function buildHeartbeatArgs(payload: HeartbeatPayload): string[] {
   const args: string[] = [
-    "--entity",
+    '--entity',
     payload.entity,
-    "--entity-type",
-    "file",
-    "--project-folder",
+    '--entity-type',
+    'file',
+    '--project-folder',
     payload.projectFolder,
-    "--plugin",
+    '--plugin',
     PLUGIN_ARG,
-    "--category",
-    "coding",
+    '--category',
+    'coding',
   ];
 
   if (payload.isWrite) {
-    args.push("--write");
+    args.push('--write');
   }
 
   return args;
@@ -77,25 +77,25 @@ export function sendHeartbeat(payload: HeartbeatPayload): void {
   const cliPath = getCliPath();
   const args = buildHeartbeatArgs(payload);
 
-  logger.debug("Spawning chronova-cli", { cliPath, args });
+  logger.debug('Spawning chronova-cli', { cliPath, args });
 
   try {
     const child = execFile(cliPath, args, (err, stdout, stderr) => {
       if (err) {
-        logger.error("chronova-cli error", { error: String(err) });
+        logger.error('chronova-cli error', { error: String(err) });
         return;
       }
       if (stderr) {
-        logger.warn("chronova-cli stderr", { stderr: stderr.trim() });
+        logger.warn('chronova-cli stderr', { stderr: stderr.trim() });
       }
       if (stdout) {
-        logger.debug("chronova-cli stdout", { stdout: stdout.trim() });
+        logger.debug('chronova-cli stdout', { stdout: stdout.trim() });
       }
     });
 
     child.unref();
   } catch (err) {
-    logger.error("Failed to spawn chronova-cli", { error: String(err) });
+    logger.error('Failed to spawn chronova-cli', { error: String(err) });
   }
 
   updateLastHeartbeat(payload.projectFolder);
@@ -106,6 +106,6 @@ export function sendHeartbeat(payload: HeartbeatPayload): void {
  * Used for session shutdown flush.
  */
 export function sendHeartbeatForce(payload: HeartbeatPayload): void {
-  logger.debug("Spawning chronova-cli (forced)", { projectFolder: payload.projectFolder });
+  logger.debug('Spawning chronova-cli (forced)', { projectFolder: payload.projectFolder });
   sendHeartbeat(payload);
 }

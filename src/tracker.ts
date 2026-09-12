@@ -1,7 +1,7 @@
-import * as path from "node:path";
-import * as os from "node:os";
-import { logger } from "./logger.js";
-import type { HeartbeatPayload } from "./heartbeat.js";
+import * as path from 'node:path';
+import * as os from 'node:os';
+import { logger } from './logger.js';
+import type { HeartbeatPayload } from './heartbeat.js';
 
 /**
  * Accumulated file changes keyed by absolute path.
@@ -25,7 +25,7 @@ export function trackRead(filePath: string): void {
   const existing = pending.get(absPath);
   if (!existing) {
     pending.set(absPath, { additions: 0, deletions: 0, isWrite: false });
-    logger.debug("Tracked read", { path: absPath });
+    logger.debug('Tracked read', { path: absPath });
   }
 }
 
@@ -42,7 +42,7 @@ export function trackWrite(filePath: string): void {
   } else {
     pending.set(absPath, { additions: 0, deletions: 0, isWrite: true });
   }
-  logger.debug("Tracked write", { path: absPath });
+  logger.debug('Tracked write', { path: absPath });
 }
 
 /**
@@ -70,7 +70,7 @@ export function trackEdit(details: {
         ? countLineChanges(result.diff)
         : { additions: 0, deletions: 0 };
       mergeChange(absPath, { ...lineChanges, isWrite: true });
-      logger.debug("Tracked edit (perFile)", { path: absPath, ...lineChanges });
+      logger.debug('Tracked edit (perFile)', { path: absPath, ...lineChanges });
     }
     return;
   }
@@ -82,7 +82,7 @@ export function trackEdit(details: {
       if (!absPath) continue;
       const count = details.fileReplacements?.find((r) => r.path === filePath)?.count ?? 1;
       mergeChange(absPath, { additions: count, deletions: 0, isWrite: true });
-      logger.debug("Tracked ast_edit", { path: absPath, count });
+      logger.debug('Tracked ast_edit', { path: absPath, count });
     }
     return;
   }
@@ -90,7 +90,7 @@ export function trackEdit(details: {
   // Single-file edit with top-level diff
   const filePath = details.path;
   if (!filePath) {
-    logger.debug("Skipped edit: no path in details");
+    logger.debug('Skipped edit: no path in details');
     return;
   }
 
@@ -101,7 +101,7 @@ export function trackEdit(details: {
     ? countLineChanges(details.diff)
     : { additions: 1, deletions: 0 };
   mergeChange(absPath, { ...lineChanges, isWrite: true });
-  logger.debug("Tracked edit (single)", { path: absPath, ...lineChanges });
+  logger.debug('Tracked edit (single)', { path: absPath, ...lineChanges });
 }
 
 /**
@@ -121,7 +121,7 @@ export function flushPending(projectFolder: string): HeartbeatPayload[] {
   }
 
   pending.clear();
-  logger.debug("Flushed pending heartbeats", { count: payloads.length });
+  logger.debug('Flushed pending heartbeats', { count: payloads.length });
   return payloads;
 }
 
@@ -153,7 +153,7 @@ export function resolvePath(base: string, filePath: string): string | null {
 
   // Reject non-file URI schemes — they are not real files on disk
   if (/^[a-z][a-z0-9+.-]*:\/\//i.test(filePath)) {
-    logger.debug("Skipping non-file URI", { path: filePath });
+    logger.debug('Skipping non-file URI', { path: filePath });
     return null;
   }
 
@@ -171,8 +171,8 @@ export function resolvePath(base: string, filePath: string): string | null {
  * so without this, paths like '~/.projects/foo' get mangled by path.resolve.
  */
 function expandTilde(filePath: string): string {
-  if (filePath === "~") return os.homedir();
-  if (filePath.startsWith("~/")) return path.join(os.homedir(), filePath.slice(2));
+  if (filePath === '~') return os.homedir();
+  if (filePath.startsWith('~/')) return path.join(os.homedir(), filePath.slice(2));
   return filePath;
 }
 
@@ -209,11 +209,11 @@ function countLineChanges(diff: string): { additions: number; deletions: number 
   let additions = 0;
   let deletions = 0;
 
-  const lines = diff.split("\n");
+  const lines = diff.split('\n');
   for (const line of lines) {
-    if (line.startsWith("+++ ") || line.startsWith("--- ")) continue;
-    if (line.startsWith("+")) additions++;
-    else if (line.startsWith("-")) deletions++;
+    if (line.startsWith('+++ ') || line.startsWith('--- ')) continue;
+    if (line.startsWith('+')) additions++;
+    else if (line.startsWith('-')) deletions++;
   }
 
   return { additions, deletions };

@@ -1,6 +1,6 @@
-import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
-import { logger } from "./logger.js";
-import { sendHeartbeat, sendHeartbeatForce } from "./heartbeat.js";
+import type { ExtensionAPI } from '@oh-my-pi/pi-coding-agent';
+import { logger } from './logger.js';
+import { sendHeartbeat, sendHeartbeatForce } from './heartbeat.js';
 import {
   trackRead,
   trackWrite,
@@ -8,28 +8,28 @@ import {
   flushPending,
   pendingCount,
   resolvePath,
-} from "./tracker.js";
-import { shouldSendHeartbeat } from "./state.js";
+} from './tracker.js';
+import { shouldSendHeartbeat } from './state.js';
 
 export default function chronovaPiPlugin(pi: ExtensionAPI): void {
-  pi.setLabel("Chronova Heartbeat");
+  pi.setLabel('Chronova Heartbeat');
 
-  let projectFolder = "";
+  let projectFolder = '';
 
   // --- session_start: set up project folder ---
-  pi.on("session_start", async (_event, ctx) => {
+  pi.on('session_start', async (_event, ctx) => {
     projectFolder = ctx.cwd;
-    logger.info("Chronova tracking active", { projectFolder });
+    logger.info('Chronova tracking active', { projectFolder });
   });
 
   // --- tool_result: extract file changes and flush heartbeats ---
-  pi.on("tool_result", async (event, _ctx) => {
+  pi.on('tool_result', async (event, _ctx) => {
     if (!projectFolder) return;
 
     const input = event.input;
 
     switch (event.toolName) {
-      case "read": {
+      case 'read': {
         const filePath = input.path as string | undefined;
         if (filePath) {
           const resolved = resolvePath(projectFolder, filePath);
@@ -39,7 +39,7 @@ export default function chronovaPiPlugin(pi: ExtensionAPI): void {
         break;
       }
 
-      case "edit": {
+      case 'edit': {
         const details = event.details as EditDetails | undefined;
         if (details) {
           const resolvedDetails = {
@@ -57,7 +57,7 @@ export default function chronovaPiPlugin(pi: ExtensionAPI): void {
         break;
       }
 
-      case "write": {
+      case 'write': {
         const filePath = input.path as string | undefined;
         if (filePath) {
           const resolved = resolvePath(projectFolder, filePath);
@@ -67,7 +67,7 @@ export default function chronovaPiPlugin(pi: ExtensionAPI): void {
         break;
       }
 
-      case "ast_edit": {
+      case 'ast_edit': {
         const details = event.details as AstEditDetails | undefined;
         if (details) {
           trackEdit({
@@ -90,12 +90,12 @@ export default function chronovaPiPlugin(pi: ExtensionAPI): void {
 
   // --- session_shutdown: force-flush pending heartbeats ---
 
-  pi.on("session_shutdown", async () => {
+  pi.on('session_shutdown', async () => {
     if (!projectFolder) return;
 
     const count = pendingCount();
     if (count > 0) {
-      logger.info("Flushing pending heartbeats on shutdown", { count });
+      logger.info('Flushing pending heartbeats on shutdown', { count });
       const payloads = flushPending(projectFolder);
       for (const payload of payloads) {
         sendHeartbeatForce(payload);
@@ -112,7 +112,7 @@ export default function chronovaPiPlugin(pi: ExtensionAPI): void {
   function tryFlush(): void {
     if (!projectFolder || pendingCount() === 0) return;
     if (!shouldSendHeartbeat(projectFolder)) {
-      logger.debug("Rate-limited, keeping pending changes", {
+      logger.debug('Rate-limited, keeping pending changes', {
         pendingCount: pendingCount(),
       });
       return;
