@@ -3,7 +3,8 @@
   "plugins": ["typescript", "unicorn", "oxc", "import", "react", "vitest"],
   "env": {
     "builtin": true,
-    "node": true
+    "node": true,
+    "es2024": true
   },
   "categories": {
     "correctness": "error"
@@ -12,10 +13,12 @@
     "no-unused-vars": [
       "error",
       {
+        "args": "after-used",
         "argsIgnorePattern": "^_",
-        "varsIgnorePattern": "^_"
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
       }
     ]
   },
-  "ignorePatterns": ["dist/**", "node_modules/**", "build/**", "out/**", ".worktrees/**"]
+  "ignorePatterns": ["node_modules/**", "dist/**", "build/**", "out/**", ".worktrees/**"]
 }

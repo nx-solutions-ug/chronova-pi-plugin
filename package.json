@@ -40,7 +40,9 @@
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "semantic-release": "semantic-release",
-    "prepublishOnly": "bun run type-check && bun run build"
+    "prepublishOnly": "bun run type-check && bun run build",
+    "lint:fix": "oxlint --react-plugin --vitest-plugin --import-plugin --fix",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@oh-my-pi/pi-coding-agent": "^18.0.0",
@@ -51,6 +53,7 @@
     "@semantic-release/npm": "^13.0.0",
     "@semantic-release/release-notes-generator": "^14.0.3",
     "@types/node": "^26.4.1",
+    "husky": "^9.1.7",
     "oxfmt": "^0.67.0",
     "oxlint": "^1.82.0",
     "semantic-release": "^25.0.0",
@@ -59,6 +62,7 @@
   "engines": {
     "node": ">=22.12"
   },
+  "packageManager": "bun@1.4.2",
   "omp": {
     "extensions": [
       "./dist/index.js"
