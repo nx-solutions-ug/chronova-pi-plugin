@@ -1,3 +1,10 @@
+## [1.7.6](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.5...v1.7.6) (2026-09-12)
+
+
+### Bug Fixes
+
+* **build:** ship dist as a single bundled ESM file ([a842b4c](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/a842b4c9a95f1267a066dbe2bd01340fdb7ecbf1))
+
 ## [1.7.5](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.4...v1.7.5) (2026-09-12)
 
 
