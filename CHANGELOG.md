@@ -1,3 +1,10 @@
+## [1.7.4](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.3...v1.7.4) (2026-09-12)
+
+
+### Bug Fixes
+
+* **ci:** bind the head SHA with real jq, not gh api --jq ([5646926](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/5646926f286cbccc97ba011a81cba627e778e685))
+
 ## [1.7.3](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.2...v1.7.3) (2026-09-05)
 
 
