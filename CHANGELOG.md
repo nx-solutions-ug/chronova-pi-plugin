@@ -1,3 +1,10 @@
+## [1.7.8](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.7...v1.7.8) (2026-10-10)
+
+
+### Bug Fixes
+
+* **ci:** stop double 👀 reaction on [@claude](https://github.com/claude) comments ([#203](https://github.com/nx-solutions-ug/chronova-pi-plugin/issues/203)) ([95c9115](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/95c9115b692d9c41ff00e4391fa5fe94fe919314))
+
 ## [1.7.7](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.6...v1.7.7) (2026-09-12)
 
 
