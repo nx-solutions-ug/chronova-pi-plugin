@@ -1,3 +1,10 @@
+## [1.7.9](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.8...v1.7.9) (2026-10-12)
+
+
+### Bug Fixes
+
+* **ci:** run [@claude](https://github.com/claude) agent as chronova-agent[bot] and allow it in dependency review ([#204](https://github.com/nx-solutions-ug/chronova-pi-plugin/issues/204)) ([c3cab0f](https://github.com/nx-solutions-ug/chronova-pi-plugin/commit/c3cab0f5b1c6df1cfcce468fdb9912439a2cf7ce))
+
 ## [1.7.8](https://github.com/nx-solutions-ug/chronova-pi-plugin/compare/v1.7.7...v1.7.8) (2026-10-10)
 
 
