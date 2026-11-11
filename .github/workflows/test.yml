@@ -13,7 +13,7 @@ concurrency:
 jobs:
   type-check:
     name: Type Check
-    runs-on: [ubuntu-latest]
+    runs-on: ${{ (github.event.pull_request.head.repo.fork || !contains(fromJSON('["","OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association || github.event.review.author_association || github.event.issue.author_association || '') || (github.run_attempt == 1 && vars.SELF_HOSTED != 'true')) && 'ubuntu-latest' || fromJSON('["self-hosted","linux","coolify"]') }}
     timeout-minutes: 5
 
     steps:
@@ -33,7 +33,7 @@ jobs:
 
   strict-type-check:
     name: Strict Type Check (no skipLibCheck)
-    runs-on: [ubuntu-latest]
+    runs-on: ${{ (github.event.pull_request.head.repo.fork || !contains(fromJSON('["","OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association || github.event.review.author_association || github.event.issue.author_association || '') || (github.run_attempt == 1 && vars.SELF_HOSTED != 'true')) && 'ubuntu-latest' || fromJSON('["self-hosted","linux","coolify"]') }}
     timeout-minutes: 10
     continue-on-error: true
 
@@ -55,7 +55,7 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: [ubuntu-latest]
+    runs-on: ${{ (github.event.pull_request.head.repo.fork || !contains(fromJSON('["","OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association || github.event.review.author_association || github.event.issue.author_association || '') || (github.run_attempt == 1 && vars.SELF_HOSTED != 'true')) && 'ubuntu-latest' || fromJSON('["self-hosted","linux","coolify"]') }}
 
     steps:
       - name: Checkout repository
@@ -77,7 +77,7 @@ jobs:
 
   build:
     name: Build
-    runs-on: [ubuntu-latest]
+    runs-on: ${{ (github.event.pull_request.head.repo.fork || !contains(fromJSON('["","OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association || github.event.review.author_association || github.event.issue.author_association || '') || (github.run_attempt == 1 && vars.SELF_HOSTED != 'true')) && 'ubuntu-latest' || fromJSON('["self-hosted","linux","coolify"]') }}
     timeout-minutes: 5
 
     steps:
